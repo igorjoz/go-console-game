@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "10329b95-dcbf-4576-81b0-2ed701903c94": {
+      "ProjectGuid": "10329b95-dcbf-4576-81b0-2ed701903c94",
+      "DisplayName": "go-console-game",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
