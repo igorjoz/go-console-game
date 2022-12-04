@@ -1,5 +1,2 @@
 ﻿  go.cpp
-  conio2.cpp
-C:\Users\Igor\source\go\go\conio2.cpp(402,5): warning C4267: 'argument': conversion from 'size_t' to 'DWORD', possible loss of data
-  Generating Code...
   go.vcxproj -> C:\Users\Igor\source\go\x64\Debug\go.exe

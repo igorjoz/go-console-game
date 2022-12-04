@@ -2,12 +2,33 @@
 #include<stdio.h>
 #include"conio2.h"
 
-/* Comment: in the final program declare appropriate constants, e.g.,
-   to eliminate from your program numerical values by replacing them
-   with well defined identifiers */
+
+int const LEFT_ARROW_KEY_CODE = 0x4b;
+int const RIGHT_ARROW_KEY_CODE = 0x4d;
+int const UP_ARROW_KEY_CODE = 0x48;
+int const DOWN_ARROW_KEY_CODE = 0x50;
+int const ENTER_KEY_CODE = 0x0d;
+
+int const MENU_DISTANCE = 48;
+
+
+void printMenu() {
+	gotoxy(MENU_DISTANCE, 1);
+	cputs("q       = exit");
+	gotoxy(MENU_DISTANCE, 2);
+	cputs("cursors = moving");
+	gotoxy(MENU_DISTANCE, 3);
+	cputs("space   = change color");
+	gotoxy(MENU_DISTANCE, 4);
+	cputs("enter   = change background color");
+}
+
 
 int main() {
-	int zn = 0, x = 40, y = 12, attr = 7, back = 0, zero = 0;
+	int keyCode = 0;
+	int x = 40, y = 12;
+	int textColorCode = 7, backgroundColorCode = 0;
+	bool isZeroFirstKeyCode = false;
 	char txt[32];
 
 	#ifndef __cplusplus
@@ -22,51 +43,52 @@ int main() {
 		clrscr();
 		textcolor(WHITE);
 
-		gotoxy(48, 1);
-		cputs("q       = exit");
-		gotoxy(48, 2);
-		cputs("cursors = moving");
-		gotoxy(48, 3);
-		cputs("space   = change color");
-		gotoxy(48, 4);
-		cputs("enter   = change background color");
+		printMenu();
 
-		if (zero) {
-			sprintf(txt, "key code: 0x00 0x%02x", zn);
+		if (isZeroFirstKeyCode) {
+			sprintf(txt, "key code: 0x00 0x%02x", keyCode);
 		}
 		else {
-			sprintf(txt, "key code: 0x%02x", zn);
+			sprintf(txt, "key code: 0x%02x", keyCode);
 		}
 
 		gotoxy(48, 5);
 		cputs(txt);
 
 		gotoxy(x, y);
-		textcolor(attr);
-		textbackground(back);
+		textcolor(textColorCode);
+		textbackground(backgroundColorCode);
 		putch('*');
 
-		// most key codes correspond to the characters, like
-		// a is 'a', 2 is '2', + is '+', but some special keys
-		// like cursors provide two characters, where the first
-		// one is zero, e.g., "up arrow" is zero and 'H'
-		zero = 0;
-		zn = getch();
-		// we do not want the key 'H' to play role of "up arrow"
-		// so we check if the first code is zero
-		if (zn == 0) {
-			zero = 1;		// if this is the case then we read
-			zn = getch();		// the next code knowing that this
-			if (zn == 0x48) y--;	// will be a special key
-			else if (zn == 0x50) y++;
-			else if (zn == 0x4b) x--;
-			else if (zn == 0x4d) x++;
-		}
-		else if (zn == ' ') attr = (attr + 1) % 16;
-		else if (zn == 0x0d) back = (back + 1) % 16;	// enter key is 0x0d or '\r'
-	} while (zn != 'q');
+		isZeroFirstKeyCode = false;
+		keyCode = getch();
 
-	_setcursortype(_NORMALCURSOR);	// show the cursor so it will be
-					// visible after the program ends
+		if (keyCode == 0) {
+			isZeroFirstKeyCode = true;
+			keyCode = getch();
+
+			if (keyCode == UP_ARROW_KEY_CODE) {
+				y--;
+			}
+			else if (keyCode == DOWN_ARROW_KEY_CODE) {
+				y++;
+			}
+			else if (keyCode == LEFT_ARROW_KEY_CODE) {
+				x--;
+			}
+			else if (keyCode == RIGHT_ARROW_KEY_CODE) {
+				x++;
+			}
+		}
+		else if (keyCode == ' ') {
+			textColorCode = (textColorCode + 1) % 16;
+		}
+		else if (keyCode == ENTER_KEY_CODE or keyCode == '\r') {
+			backgroundColorCode = (backgroundColorCode + 1) % 16;
+		}
+	} while (keyCode != 'q');
+
+	_setcursortype(_NORMALCURSOR);
+
 	return 0;
 }
