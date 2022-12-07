@@ -28,15 +28,14 @@
 #define _NORMALCURSOR	2
 
 #ifndef EOF
-#define EOF		-1
+	#define EOF		-1
 #endif
 
 #define LASTMODE	-1
 #define C80			3
 #define C4350		8
 
-extern int _wscroll;	// 1 = enable scroll
-						// 0 = disable scroll
+extern int _wscroll;	// 1 = enable scroll; 0 = disable scroll
 
 struct text_info {
 	unsigned char curx;
@@ -48,7 +47,7 @@ struct text_info {
 };
 
 #ifdef __cplusplus
-extern "C" {
+	extern "C" {
 #endif
 	void gotoxy(int x, int y);		// move cursor to the position (x,y)
 	int wherex(void);				// return x coordinate of the cursor
@@ -89,12 +88,11 @@ extern "C" {
 	// set screen size: C80, C4350 or LASTMODE
 	void textmode(int mode);
 
-	// bonus functions
 	void settitle(const char* title);
 
 	int Conio2_Init(void);
 #ifdef __cplusplus
-}
+	}
 #endif
 
 #endif

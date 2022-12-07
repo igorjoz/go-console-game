@@ -9,7 +9,34 @@ int const UP_ARROW_KEY_CODE = 0x48;
 int const DOWN_ARROW_KEY_CODE = 0x50;
 int const ENTER_KEY_CODE = 0x0d;
 
+int const BOARD_SIZE = 9;
+int const INCREMENTED_BOARD_SIZE = BOARD_SIZE + 1;
+int const DOUBLE_INCREMENTED_BOARD_SIZE = BOARD_SIZE + 1;
 int const MENU_DISTANCE = 48;
+
+int const INITIAL_CURSOR_X_POSITION = 2;
+int const INITIAL_CURSOR_Y_POSITION = 2;
+
+
+void setInitialProgramSettings() {
+	#ifndef __cplusplus
+		Conio2_Init();
+	#endif
+
+	settitle("Igor Jozefowicz, 193257");
+	_setcursortype(_NOCURSOR);
+}
+
+
+void setInitialConsoleSettings(char keyCodeText[], int x, int y, int textColorCode, int backgroundColorCode) {
+	gotoxy(48, 5);
+	cputs(keyCodeText);
+
+	gotoxy(x, y);
+	textcolor(textColorCode);
+	textbackground(backgroundColorCode);
+	putch('*');
+}
 
 
 void printMenu() {
@@ -24,41 +51,86 @@ void printMenu() {
 }
 
 
+void printKeyCode(bool isZeroFirstKeyCode, char keyCodeText[], int keyCode) {
+	if (isZeroFirstKeyCode) {
+		sprintf(keyCodeText, "key code: 0x00 0x%02x", keyCode);
+	}
+	else {
+		sprintf(keyCodeText, "key code: 0x%02x", keyCode);
+	}
+}
+
+
+void printBoard() {
+	for (int columnIndex = 1; columnIndex <= DOUBLE_INCREMENTED_BOARD_SIZE; columnIndex++) {
+		gotoxy(columnIndex, 1);
+		putch('-');
+	}
+
+	for (int rowIndex = 1; rowIndex <= DOUBLE_INCREMENTED_BOARD_SIZE; rowIndex++) {
+		gotoxy(1, rowIndex);
+		putch('|');
+	}
+
+	for (int rowIndex = 1; rowIndex <= DOUBLE_INCREMENTED_BOARD_SIZE; rowIndex++) {
+		gotoxy(DOUBLE_INCREMENTED_BOARD_SIZE, rowIndex);
+		putch('|');
+	}
+
+	for (int columnIndex = 1; columnIndex <= DOUBLE_INCREMENTED_BOARD_SIZE; columnIndex++) {
+		gotoxy(columnIndex, DOUBLE_INCREMENTED_BOARD_SIZE);
+		putch('-');
+	}
+}
+
+
+void moveCursor(int keyCode, int* x, int* y) {
+	if (keyCode == LEFT_ARROW_KEY_CODE and *x > 2) {
+		(*x)--;
+	}
+	else if (keyCode == RIGHT_ARROW_KEY_CODE and *x < BOARD_SIZE) {
+		(*x)++;
+	}
+	else if (keyCode == UP_ARROW_KEY_CODE and *y > 2) {
+		(*y)--;
+	}
+	else if (keyCode == DOWN_ARROW_KEY_CODE and *y < BOARD_SIZE) {
+		(*y)++;
+	}
+}
+
+
+void setNextTextColor(int* textColorCode) {
+	*textColorCode = ((*textColorCode) + 1) % 16;
+}
+
+
+void setNextBackgroundColor(int* backgroundColorCode) {
+	*backgroundColorCode = ((*backgroundColorCode) + 1) % 16;
+}
+
+
 int main() {
 	int keyCode = 0;
-	int x = 40, y = 12;
-	int textColorCode = 7, backgroundColorCode = 0;
+	int x = INITIAL_CURSOR_X_POSITION, y = INITIAL_CURSOR_Y_POSITION;
+	int textColorCode = WHITE, backgroundColorCode = BLACK;
 	bool isZeroFirstKeyCode = false;
-	char txt[32];
+	char keyCodeText[32];
 
-	#ifndef __cplusplus
-		Conio2_Init();
-	#endif
-
-	settitle("Igor Jozefowicz, 193257");
-	_setcursortype(_NOCURSOR);
+	setInitialProgramSettings();
 
 	do {
 		textbackground(BLACK);
 		clrscr();
 		textcolor(WHITE);
 
+		printBoard();
+
 		printMenu();
 
-		if (isZeroFirstKeyCode) {
-			sprintf(txt, "key code: 0x00 0x%02x", keyCode);
-		}
-		else {
-			sprintf(txt, "key code: 0x%02x", keyCode);
-		}
+		printKeyCode(isZeroFirstKeyCode, keyCodeText, keyCode);
 
-		gotoxy(48, 5);
-		cputs(txt);
-
-		gotoxy(x, y);
-		textcolor(textColorCode);
-		textbackground(backgroundColorCode);
-		putch('*');
+		setInitialConsoleSettings(keyCodeText, x, y, textColorCode, backgroundColorCode);
 
 		isZeroFirstKeyCode = false;
 		keyCode = getch();
@@ -67,24 +139,13 @@ int main() {
 			isZeroFirstKeyCode = true;
 			keyCode = getch();
 
-			if (keyCode == UP_ARROW_KEY_CODE) {
-				y--;
-			}
-			else if (keyCode == DOWN_ARROW_KEY_CODE) {
-				y++;
-			}
-			else if (keyCode == LEFT_ARROW_KEY_CODE) {
-				x--;
-			}
-			else if (keyCode == RIGHT_ARROW_KEY_CODE) {
-				x++;
-			}
+			moveCursor(keyCode, &x, &y);
 		}
 		else if (keyCode == ' ') {
-			textColorCode = (textColorCode + 1) % 16;
+			setNextTextColor(&textColorCode);
 		}
 		else if (keyCode == ENTER_KEY_CODE or keyCode == '\r') {
-			backgroundColorCode = (backgroundColorCode + 1) % 16;
+			setNextBackgroundColor(&backgroundColorCode);
 		}
 	} while (keyCode != 'q');
 
