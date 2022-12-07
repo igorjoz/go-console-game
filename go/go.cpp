@@ -2,6 +2,8 @@
 #include<stdio.h>
 #include"conio2.h"
 
+#include"Board.h"
+
 
 int const LEFT_ARROW_KEY_CODE = 0x4b;
 int const RIGHT_ARROW_KEY_CODE = 0x4d;
@@ -10,8 +12,6 @@ int const DOWN_ARROW_KEY_CODE = 0x50;
 int const ENTER_KEY_CODE = 0x0d;
 
 int const BOARD_SIZE = 9;
-int const INCREMENTED_BOARD_SIZE = BOARD_SIZE + 1;
-int const DOUBLE_INCREMENTED_BOARD_SIZE = BOARD_SIZE + 1;
 int const MENU_DISTANCE = 48;
 
 int const INITIAL_CURSOR_X_POSITION = 2;
@@ -35,7 +35,8 @@ void setInitialConsoleSettings(char keyCodeText[], int x, int y, int textColorCo
 	gotoxy(x, y);
 	textcolor(textColorCode);
 	textbackground(backgroundColorCode);
-	putch('*');
+
+	putch('@');
 }
 
 
@@ -62,23 +63,32 @@ void printKeyCode(bool isZeroFirstKeyCode, char keyCodeText[], int keyCode) {
 
 
 void printBoard() {
-	for (int columnIndex = 1; columnIndex <= DOUBLE_INCREMENTED_BOARD_SIZE; columnIndex++) {
+	for (int columnIndex = 1; columnIndex <= BOARD_SIZE + 2; columnIndex++) {
 		gotoxy(columnIndex, 1);
 		putch('-');
 	}
+	
+	for (int rowIndex = 2; rowIndex < BOARD_SIZE + 2; rowIndex++) {
+		for (int columnIndex = 2; columnIndex < BOARD_SIZE + 2; columnIndex++) {
+			gotoxy(columnIndex, rowIndex);
+			putch('+');
+		}
+	}
+	
+	
 
-	for (int rowIndex = 1; rowIndex <= DOUBLE_INCREMENTED_BOARD_SIZE; rowIndex++) {
+	for (int rowIndex = 1; rowIndex <= BOARD_SIZE + 2; rowIndex++) {
 		gotoxy(1, rowIndex);
 		putch('|');
 	}
 
-	for (int rowIndex = 1; rowIndex <= DOUBLE_INCREMENTED_BOARD_SIZE; rowIndex++) {
-		gotoxy(DOUBLE_INCREMENTED_BOARD_SIZE, rowIndex);
+	for (int rowIndex = 1; rowIndex <= BOARD_SIZE + 2; rowIndex++) {
+		gotoxy(BOARD_SIZE + 2, rowIndex);
 		putch('|');
 	}
 
-	for (int columnIndex = 1; columnIndex <= DOUBLE_INCREMENTED_BOARD_SIZE; columnIndex++) {
-		gotoxy(columnIndex, DOUBLE_INCREMENTED_BOARD_SIZE);
+	for (int columnIndex = 1; columnIndex <= BOARD_SIZE + 2; columnIndex++) {
+		gotoxy(columnIndex, BOARD_SIZE + 2);
 		putch('-');
 	}
 }
@@ -88,13 +98,13 @@ void moveCursor(int keyCode, int* x, int* y) {
 	if (keyCode == LEFT_ARROW_KEY_CODE and *x > 2) {
 		(*x)--;
 	}
-	else if (keyCode == RIGHT_ARROW_KEY_CODE and *x < BOARD_SIZE) {
+	else if (keyCode == RIGHT_ARROW_KEY_CODE and *x < BOARD_SIZE + 1) {
 		(*x)++;
 	}
 	else if (keyCode == UP_ARROW_KEY_CODE and *y > 2) {
 		(*y)--;
 	}
-	else if (keyCode == DOWN_ARROW_KEY_CODE and *y < BOARD_SIZE) {
+	else if (keyCode == DOWN_ARROW_KEY_CODE and *y < BOARD_SIZE + 1) {
 		(*y)++;
 	}
 }
