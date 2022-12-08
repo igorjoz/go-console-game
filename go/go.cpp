@@ -7,51 +7,48 @@
 #include"Console.h"
 #include"Cursor.h"
 #include"Menu.h"
+#include"Player.h"
 
 
 int const ENTER_KEY_CODE = 0x0d;
 
 
 int main() {
-	int keyCode = 0;
+	Player player1(1);
+	Player player2(2);
 	
-	char keyCodeText[32];
-
+	//Board board(player1);
 	Board board;
+	Menu menu;
 	Cursor cursor;
 	Console console;
 
 	Console::setInitialProgramSettings();
 
 	do {
-		textbackground(BLACK);
-		clrscr();
-		textcolor(WHITE);
-
+		console.refreshSettings();
 		board.printBoard();
-
-		Menu::printMenu();
-
-		console.printKeyCode(keyCodeText, keyCode);
-
-		console.setInitialConsoleSettings(keyCodeText, cursor.getX(), cursor.getY());
+		menu.printMenu(console, cursor);
 
 		console.setIsZeroFirstKeyCode(false);
-		keyCode = getch();
+		console.setKeyCode(getch());
 
-		if (keyCode == 0) {
+		if (console.getKeyCode() == 0) {
 			console.setIsZeroFirstKeyCode(true);
-			keyCode = getch();
+			console.setKeyCode(getch());
 
-			cursor.moveCursor(keyCode);
+			cursor.moveCursor(console.getKeyCode());
 		}
-		else if (keyCode == ' ') {
+		else if (console.getKeyCode() == I_KEY_CODE) {
+			board.insertStone(cursor.getX(), cursor.getY());
+		}
+		else if (console.getKeyCode() == ' ') {
 			console.setNextTextColor();
 		}
-		else if (keyCode == ENTER_KEY_CODE or keyCode == '\r') {
+		else if (console.getKeyCode() == ENTER_KEY_CODE or console.getKeyCode() == '\r') {
 			console.setNextBackgroundColor();
 		}
-	} while (keyCode != 'q');
+	} while (console.getKeyCode() != 'q');
 
 	_setcursortype(_NORMALCURSOR);
 

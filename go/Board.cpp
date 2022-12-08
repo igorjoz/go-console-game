@@ -1,60 +1,71 @@
 #include "Board.h"
-#include"conio2.h"
-
-#include <array>
-#include <cstdint>
-#include <string>
-#include <vector>
 
 
-struct Point {
-	int x, y;
-};
-
-
-struct Move {
-	Point point;
-	int player;  // 1 for black, 2 for white
-};
-
-
-Board::Board() {
-	for (int i = 0; i < 9; i++) {
-		//for (int j = 0; j < boardSize; j++) {
-		//board[i][j] = 0;
-		board[i] = 0;
-		//}
+Board::Board(Player player) {
+//Board::Board() {
+	this->boardSize = BOARD_SIZE;
+	
+	for (int i = 0; i < this->boardSize; i++) {
+		for (int j = 0; j < this->boardSize; j++) {
+			board[i][j] = 0;
+		}
 	}
+	
+	this->currentPlayer = player;
+	//this->currentPlayer = Player(1);
 }
 
 
 void Board::printBoard() {
-	for (int columnIndex = 1; columnIndex <= BOARD_SIZE + 2; columnIndex++) {
-		gotoxy(columnIndex, 1);
+	for (int columnIndex = LEFT_BOARD_BORDER_X; columnIndex <= RIGHT_BOARD_BORDER_X; columnIndex++) {
+		gotoxy(columnIndex, TOP_BOARD_BORDER_Y);
+		putch('-');
+		
+		gotoxy(columnIndex, BOTTOM_BOARD_BORDER_Y);
 		putch('-');
 	}
 
-	for (int rowIndex = 1; rowIndex <= BOARD_SIZE + 2; rowIndex++) {
-		gotoxy(1, rowIndex);
+	for (int rowIndex = TOP_BOARD_BORDER_Y; rowIndex <= BOTTOM_BOARD_BORDER_Y; rowIndex++) {
+		gotoxy(LEFT_BOARD_BORDER_X, rowIndex);
+		putch('|');
+
+		gotoxy(RIGHT_BOARD_BORDER_X, rowIndex);
 		putch('|');
 	}
 
-	for (int rowIndex = 1; rowIndex <= BOARD_SIZE + 2; rowIndex++) {
-		gotoxy(BOARD_SIZE + 2, rowIndex);
-		putch('|');
-	}
-
-	for (int columnIndex = 1; columnIndex <= BOARD_SIZE + 2; columnIndex++) {
-		gotoxy(columnIndex, BOARD_SIZE + 2);
-		putch('-');
-	}
-
-	for (int rowIndex = 2; rowIndex < BOARD_SIZE + 2; rowIndex++) {
-		for (int columnIndex = 2; columnIndex < BOARD_SIZE + 2; columnIndex++) {
+	for (int rowIndex = TOP_BOARD_BORDER_Y + 1; rowIndex < BOTTOM_BOARD_BORDER_Y; rowIndex++) {
+		for (int columnIndex = LEFT_BOARD_BORDER_X + 1; columnIndex < RIGHT_BOARD_BORDER_X; columnIndex++) {
 			gotoxy(columnIndex, rowIndex);
 			putch('+');
 		}
 	}
+}
+
+
+//Player Board::getCurrentPlayer() {
+//	return this->currentPlayer;
+//}
+//
+//
+//void Board::insertStone(int x, int y) {
+//	gotoxy(x, y);
+//	
+//	if (this->currentPlayer.getId() == 1) {
+//		textcolor(BLACK);
+//		putch('O');
+//	}
+//	else if (this->currentPlayer.getId() == 2) {
+//		textcolor(WHITE);
+//		putch('O');
+//	}
+//}
+
+
+void Board::insertStone(int x, int y) {
+	gotoxy(x, y);
+
+	textcolor(BLACK);
+	putch('O');
 }
 	
 
