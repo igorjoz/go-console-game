@@ -1,13 +1,17 @@
 #pragma once
 
-using namespace std;
+
+int const BOARD_SIZE = 9;
+
 
 class Board
 {
 public:
-	void setCursor() {
-		putch('X');
-	}
+	Board();
+	void printBoard();
+
+private:
+	int board[9];
 };
 
 

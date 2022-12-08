@@ -140,12 +140,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Console.cpp" />
+    <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="go.cpp" />
     <ClCompile Include="conio2.cpp" />
+    <ClCompile Include="Menu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="conio2.h" />
+    <ClInclude Include="Console.h" />
+    <ClInclude Include="Cursor.h" />
+    <ClInclude Include="Menu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
