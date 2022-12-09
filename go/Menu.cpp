@@ -8,7 +8,7 @@ Menu::Menu() {
 }
 
 
-void Menu::printMenu(Console console, Cursor cursor) {
+void Menu::printMenu(Console console, Board board, Cursor cursor) {
 	int keyCode = 0;
 	this->restartMenuRow();
 	
@@ -34,11 +34,22 @@ void Menu::printMenu(Console console, Cursor cursor) {
 	_itoa_s(cursor.getX(), xCoordinate, 10);
 	_itoa_s(cursor.getY(), yCoordinate, 10);
 
-	char coordinates[32] = "x: ";
-	strcat_s(coordinates, xCoordinate);
-	strcat_s(coordinates, " y: ");
-	strcat_s(coordinates, yCoordinate);
-	cputs(coordinates);
+	char coordinatesText[32] = "x: ";
+	strcat_s(coordinatesText, xCoordinate);
+	strcat_s(coordinatesText, " y: ");
+	strcat_s(coordinatesText, yCoordinate);
+	cputs(coordinatesText);
+
+	char currentPlayerText[32] = "current player: ";
+	if (board.getCurrentPlayer().getId() == WHITE_PLAYER_ID) {
+		strcat_s(currentPlayerText, "white");
+	}
+	else {
+		strcat_s(currentPlayerText, "black");
+	}
+
+	gotoxy(MENU_DISTANCE, this->incrementMenuRow());
+	cputs(currentPlayerText);
 
 	console.printKeyCode();
 	console.setInitialConsoleSettings(cursor.getX(), cursor.getY());

@@ -15,7 +15,18 @@ Board::Board(Player player) {
 
 
 void Board::printBoard() {
-	// top & bottom (horizontal) border + top & bottom inner board intersections
+	Board::printTopAndBottomBorder();
+	Board::printLeftAndRightBorder();
+
+	Board::printBoardStructure();
+
+	Board::printBorderCorners();
+	Board::printBoardCorners();
+
+	this->printBoardState();
+}
+
+void Board::printTopAndBottomBorder() {
 	for (int columnIndex = LEFT_BOARD_BORDER_X + 1; columnIndex <= RIGHT_BOARD_BORDER_X - 1; columnIndex++) {
 		gotoxy(columnIndex, TOP_BOARD_BORDER_Y);
 		putch(DOUBLE_HORIZONTAL_LINE_CODE);
@@ -38,8 +49,9 @@ void Board::printBoard() {
 			putch(HORIZONTAL_LINE_CHARACTER_CODE);
 		}
 	}
+}
 
-	// left & rigth (vertical) border
+void Board::printLeftAndRightBorder() {
 	for (int rowIndex = TOP_BOARD_BORDER_Y + 1; rowIndex <= BOTTOM_BOARD_BORDER_Y - 1; rowIndex++) {
 		gotoxy(LEFT_BOARD_BORDER_X, rowIndex);
 		putch(DOUBLE_VERTICAL_LINE_CODE);
@@ -53,8 +65,9 @@ void Board::printBoard() {
 		gotoxy(RIGHT_BOARD_BORDER_X - 2, rowIndex);
 		putch(RIGHT_INTERSECTION_CHARACTER_CODE);
 	}
+}
 
-	// board structure
+void Board::printBoardStructure() {
 	for (int rowIndex = TOP_BOARD_BORDER_Y + 2; rowIndex < BOTTOM_BOARD_BORDER_Y - 1; rowIndex++) {
 		for (int columnIndex = LEFT_BOARD_BORDER_X + 4; columnIndex < RIGHT_BOARD_BORDER_X - 2; columnIndex += 2) {
 			gotoxy(columnIndex, rowIndex);
@@ -69,8 +82,9 @@ void Board::printBoard() {
 			putch(HORIZONTAL_LINE_CHARACTER_CODE);
 		}
 	}
+}
 
-	// corners of the border
+void Board::printBorderCorners() {
 	gotoxy(LEFT_BOARD_BORDER_X, TOP_BOARD_BORDER_Y);
 	putch(TOP_LEFT_DOUBLE_LINE_CORNER_CODE);
 
@@ -82,8 +96,9 @@ void Board::printBoard() {
 
 	gotoxy(RIGHT_BOARD_BORDER_X, BOTTOM_BOARD_BORDER_Y);
 	putch(BOTTOM_RIGHT_DOUBLE_LINE_CORNER_CODE);
-	
-	// corners of the board
+}
+
+void Board::printBoardCorners() {
 	gotoxy(LEFT_BOARD_BORDER_X + 2, TOP_BOARD_BORDER_Y + 1);
 	putch(TOP_LEFT_LINE_CORNER_CODE);
 
@@ -97,31 +112,42 @@ void Board::printBoard() {
 	putch(BOTTOM_RIGHT_LINE_CORNER_CODE);
 }
 
+void Board::printBoardState() {
+	for (int rowIndex = TOP_BOARD_BORDER_Y + 1; rowIndex < BOTTOM_BOARD_BORDER_Y; rowIndex++) {
+		for (int columnIndex = LEFT_BOARD_BORDER_X + 2; columnIndex < RIGHT_BOARD_BORDER_X; columnIndex += 2) {
+			gotoxy(columnIndex, rowIndex);
+
+			if (this->board[rowIndex][columnIndex] == 1) {
+				textcolor(GREEN);
+				putch('O');
+			}
+			else if (this->board[rowIndex][columnIndex] == 2) {
+				textcolor(BLUE);
+				putch('O');
+			}
+
+			textcolor(WHITE);
+		}
+	}
+}
+
 
 Player Board::getCurrentPlayer() {
 	return this->currentPlayer;
 }
 
 
-//void Board::insertStone(int x, int y) {
-//	gotoxy(x, y);
-//	
-//	if (this->currentPlayer.getId() == 1) {
-//		textcolor(BLACK);
-//		putch('O');
-//	}
-//	else if (this->currentPlayer.getId() == 2) {
-//		textcolor(WHITE);
-//		putch('O');
-//	}
-//}
-
-
 void Board::insertStone(int x, int y) {
 	gotoxy(x, y);
-
-	textcolor(BLACK);
-	putch('O');
+	
+	if (this->currentPlayer.getId() == 1) {
+		textcolor(BLACK);
+		putch('O');
+	}
+	else if (this->currentPlayer.getId() == 2) {
+		textcolor(WHITE);
+		putch('O');
+	}
 }
 
 

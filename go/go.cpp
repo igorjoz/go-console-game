@@ -17,8 +17,7 @@ int main() {
 	Player player1(1);
 	Player player2(2);
 	
-	//Board board(player1);
-	Board board;
+	Board board(player1);
 	Menu menu;
 	Cursor cursor;
 	Console console;
@@ -28,7 +27,7 @@ int main() {
 	do {
 		console.refreshSettings();
 		board.printBoard();
-		menu.printMenu(console, cursor);
+		menu.printMenu(console, board, cursor);
 
 		console.setIsZeroFirstKeyCode(false);
 		console.setKeyCode(getch());

@@ -1,8 +1,11 @@
 #pragma once
 
 #include "conio2.h"
+
 #include "Console.h"
 #include "Cursor.h"
+#include"Board.h";
+#include"Player.h"
 
 
 int const MENU_DISTANCE = 48;
@@ -12,7 +15,7 @@ class Menu
 {
 public:
 	Menu();
-	void printMenu(Console console, Cursor cursor);
+	void printMenu(Console console, Board border, Cursor cursor);
 	int incrementMenuRow();
 	void restartMenuRow();
 

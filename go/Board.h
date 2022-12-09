@@ -38,18 +38,26 @@ unsigned char const TOP_RIGHT_LINE_CORNER_CODE = 191;
 unsigned char const BOTTOM_RIGHT_LINE_CORNER_CODE = 217;
 unsigned char const BOTTOM_LEFT_LINE_CORNER_CODE = 192;
 
+unsigned short int const WHITE_PLAYER_ID = 1;
+unsigned short int const BLACK_PLAYER_ID = 2;
+
 
 class Board
 {
 public:
-	Board(Player player = Player(1));
-	//Board();
+	Board(Player player);
 	void printBoard();
+	void static printTopAndBottomBorder();
+	void static printLeftAndRightBorder();
+	void static printBoardStructure();
+	void static printBorderCorners();
+	void static printBoardCorners();
+	void printBoardState();
 	void insertStone(int x, int y);
 	Player getCurrentPlayer();
 
 private:
 	int boardSize;
 	short unsigned int board[BOARD_SIZE][BOARD_SIZE];
-	Player currentPlayer = Player(1);
+	Player currentPlayer;
 };
