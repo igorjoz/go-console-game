@@ -3,6 +3,7 @@
 #include"conio2.h"
 
 #include"Player.h"
+#include"Point.h"
 
 
 int const BOARD_SIZE = 9;
@@ -45,7 +46,7 @@ unsigned short int const BLACK_PLAYER_ID = 2;
 class Board
 {
 public:
-	Board(Player player);
+	Board(Player player1, Player player2);
 	void printBoard();
 	void static printTopAndBottomBorder();
 	void static printLeftAndRightBorder();
@@ -54,10 +55,14 @@ public:
 	void static printBoardCorners();
 	void printBoardState();
 	void insertStone(int x, int y);
+	int getBoardValueByCursorPosition(int x, int y);
+	void setBoardValueByCursorPosition(int x, int y, int value);
+	void changePlayer();
 	Player getCurrentPlayer();
 
 private:
 	int boardSize;
 	short unsigned int board[BOARD_SIZE][BOARD_SIZE];
 	Player currentPlayer;
+	Player player1, player2;
 };

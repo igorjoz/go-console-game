@@ -17,7 +17,7 @@ int main() {
 	Player player1(1);
 	Player player2(2);
 	
-	Board board(player1);
+	Board board(player1, player2);
 	Menu menu;
 	Cursor cursor;
 	Console console;

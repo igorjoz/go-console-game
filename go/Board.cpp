@@ -1,7 +1,7 @@
 #include "Board.h"
 
 
-Board::Board(Player player) {
+Board::Board(Player player1, Player player2) {
 	this->boardSize = BOARD_SIZE;
 	
 	for (int i = 0; i < this->boardSize; i++) {
@@ -10,7 +10,9 @@ Board::Board(Player player) {
 		}
 	}
 	
-	this->currentPlayer = player;
+	this->currentPlayer = player1;
+	this->player1 = player1;
+	this->player2 = player2;
 }
 
 
@@ -115,13 +117,15 @@ void Board::printBoardCorners() {
 void Board::printBoardState() {
 	for (int rowIndex = TOP_BOARD_BORDER_Y + 1; rowIndex < BOTTOM_BOARD_BORDER_Y; rowIndex++) {
 		for (int columnIndex = LEFT_BOARD_BORDER_X + 2; columnIndex < RIGHT_BOARD_BORDER_X; columnIndex += 2) {
+			int boardValue = this->getBoardValueByCursorPosition(columnIndex, rowIndex);
+
 			gotoxy(columnIndex, rowIndex);
 
-			if (this->board[rowIndex][columnIndex] == 1) {
+			if (boardValue == 1) {
 				textcolor(GREEN);
-				putch('O');
+				//putch('O');
 			}
-			else if (this->board[rowIndex][columnIndex] == 2) {
+			else if (boardValue == 2) {
 				textcolor(BLUE);
 				putch('O');
 			}
@@ -141,12 +145,35 @@ void Board::insertStone(int x, int y) {
 	gotoxy(x, y);
 	
 	if (this->currentPlayer.getId() == 1) {
-		textcolor(BLACK);
-		putch('O');
+		this->setBoardValueByCursorPosition(x, y, 1);
+		
+		//textcolor(BLACK);
+		//putch('O');
 	}
 	else if (this->currentPlayer.getId() == 2) {
-		textcolor(WHITE);
-		putch('O');
+		this->setBoardValueByCursorPosition(x, y, 2);
+		
+		//textcolor(WHITE);
+		//putch('O');
+	}
+
+	this->changePlayer();
+}
+
+int Board::getBoardValueByCursorPosition(int x, int y) {
+	return this->board[(y - TOP_BOARD_BORDER_Y - 1) / 2][(x - LEFT_BOARD_BORDER_X - 2) / 2];
+}
+
+void Board::setBoardValueByCursorPosition(int x, int y, int value) {
+	this->board[(y - TOP_BOARD_BORDER_Y - 1) / 2][(x - LEFT_BOARD_BORDER_X - 2) / 2] = value;
+}
+
+void Board::changePlayer() {
+	if (this->currentPlayer.getId() == 1) {
+		this->currentPlayer = this->player2;
+	}
+	else if (this->currentPlayer.getId() == 2) {
+		this->currentPlayer = this->player1;
 	}
 }
 
