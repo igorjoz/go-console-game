@@ -1,9 +1,8 @@
 ﻿  Board.cpp
   Cursor.cpp
   Menu.cpp
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\stdio.h(41,1): warning C4005: 'EOF': macro redefinition
-C:\Users\igorj\source\go-console-game\go\conio2.h(31,1): message : see previous definition of 'EOF'
-  Player.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\ucrt\stdio.h(41,1): warning C4005: 'EOF': macro redefinition
+C:\Users\Igor\source\go\go\conio2.h(31,1): message : see previous definition of 'EOF'
   go.cpp
   Generating Code...
-  go.vcxproj -> C:\Users\igorj\source\go-console-game\x64\Debug\go.exe
+  go.vcxproj -> C:\Users\Igor\source\go\x64\Debug\go.exe

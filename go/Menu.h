@@ -13,7 +13,7 @@ class Menu
 public:
 	Menu();
 	void printMenu(Console console, Cursor cursor);
-	int getMenuRowAndIncrement();
+	int incrementMenuRow();
 	void restartMenuRow();
 
 private:

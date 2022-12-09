@@ -2,7 +2,6 @@
 
 
 Board::Board(Player player) {
-//Board::Board() {
 	this->boardSize = BOARD_SIZE;
 	
 	for (int i = 0; i < this->boardSize; i++) {
@@ -12,41 +11,98 @@ Board::Board(Player player) {
 	}
 	
 	this->currentPlayer = player;
-	//this->currentPlayer = Player(1);
 }
 
 
 void Board::printBoard() {
-	for (int columnIndex = LEFT_BOARD_BORDER_X; columnIndex <= RIGHT_BOARD_BORDER_X; columnIndex++) {
+	// top & bottom (horizontal) border + top & bottom inner board intersections
+	for (int columnIndex = LEFT_BOARD_BORDER_X + 1; columnIndex <= RIGHT_BOARD_BORDER_X - 1; columnIndex++) {
 		gotoxy(columnIndex, TOP_BOARD_BORDER_Y);
-		putch('-');
-		
+		putch(DOUBLE_HORIZONTAL_LINE_CODE);
+
 		gotoxy(columnIndex, BOTTOM_BOARD_BORDER_Y);
-		putch('-');
-	}
+		putch(DOUBLE_HORIZONTAL_LINE_CODE);
 
-	for (int rowIndex = TOP_BOARD_BORDER_Y; rowIndex <= BOTTOM_BOARD_BORDER_Y; rowIndex++) {
-		gotoxy(LEFT_BOARD_BORDER_X, rowIndex);
-		putch('|');
+		if (columnIndex % 2 == 1) {
+			gotoxy(columnIndex, TOP_BOARD_BORDER_Y + 1);
+			putch(TOP_INTERSECTION_CHARACTER_CODE);
 
-		gotoxy(RIGHT_BOARD_BORDER_X, rowIndex);
-		putch('|');
-	}
+			gotoxy(columnIndex, BOTTOM_BOARD_BORDER_Y - 1);
+			putch(BOTTOM_INTERSECTION_CHARACTER_CODE);
+		}
+		else if (columnIndex > LEFT_BOARD_BORDER_X + 2 and columnIndex < RIGHT_BOARD_BORDER_X - 2) {
+			gotoxy(columnIndex, TOP_BOARD_BORDER_Y + 1);
+			putch(HORIZONTAL_LINE_CHARACTER_CODE);
 
-	for (int rowIndex = TOP_BOARD_BORDER_Y + 1; rowIndex < BOTTOM_BOARD_BORDER_Y; rowIndex++) {
-		for (int columnIndex = LEFT_BOARD_BORDER_X + 1; columnIndex < RIGHT_BOARD_BORDER_X; columnIndex++) {
-			gotoxy(columnIndex, rowIndex);
-			putch('+');
+			gotoxy(columnIndex, BOTTOM_BOARD_BORDER_Y - 1);
+			putch(HORIZONTAL_LINE_CHARACTER_CODE);
 		}
 	}
+
+	// left & rigth (vertical) border
+	for (int rowIndex = TOP_BOARD_BORDER_Y + 1; rowIndex <= BOTTOM_BOARD_BORDER_Y - 1; rowIndex++) {
+		gotoxy(LEFT_BOARD_BORDER_X, rowIndex);
+		putch(DOUBLE_VERTICAL_LINE_CODE);
+
+		gotoxy(RIGHT_BOARD_BORDER_X, rowIndex);
+		putch(DOUBLE_VERTICAL_LINE_CODE);
+
+		gotoxy(LEFT_BOARD_BORDER_X + 2, rowIndex);
+		putch(LEFT_INTERSECTION_CHARACTER_CODE);
+
+		gotoxy(RIGHT_BOARD_BORDER_X - 2, rowIndex);
+		putch(RIGHT_INTERSECTION_CHARACTER_CODE);
+	}
+
+	// board structure
+	for (int rowIndex = TOP_BOARD_BORDER_Y + 2; rowIndex < BOTTOM_BOARD_BORDER_Y - 1; rowIndex++) {
+		for (int columnIndex = LEFT_BOARD_BORDER_X + 4; columnIndex < RIGHT_BOARD_BORDER_X - 2; columnIndex += 2) {
+			gotoxy(columnIndex, rowIndex);
+			putch(INTERSECTION_CHARACTER_CODE);
+		}
+	}
+
+	// fill gaps between rows
+	for (int rowIndex = TOP_BOARD_BORDER_Y + 2; rowIndex < BOTTOM_BOARD_BORDER_Y - 1; rowIndex++) {
+		for (int columnIndex = LEFT_BOARD_BORDER_X + 4; columnIndex < RIGHT_BOARD_BORDER_X; columnIndex += 2) {
+			gotoxy(columnIndex - 1, rowIndex);
+			putch(HORIZONTAL_LINE_CHARACTER_CODE);
+		}
+	}
+
+	// corners of the border
+	gotoxy(LEFT_BOARD_BORDER_X, TOP_BOARD_BORDER_Y);
+	putch(TOP_LEFT_DOUBLE_LINE_CORNER_CODE);
+
+	gotoxy(LEFT_BOARD_BORDER_X, BOTTOM_BOARD_BORDER_Y);
+	putch(BOTTOM_LEFT_DOUBLE_LINE_CORNER_CODE);
+
+	gotoxy(RIGHT_BOARD_BORDER_X, TOP_BOARD_BORDER_Y);
+	putch(TOP_RIGHT_DOUBLE_LINE_CORNER_CODE);
+
+	gotoxy(RIGHT_BOARD_BORDER_X, BOTTOM_BOARD_BORDER_Y);
+	putch(BOTTOM_RIGHT_DOUBLE_LINE_CORNER_CODE);
+	
+	// corners of the board
+	gotoxy(LEFT_BOARD_BORDER_X + 2, TOP_BOARD_BORDER_Y + 1);
+	putch(TOP_LEFT_LINE_CORNER_CODE);
+
+	gotoxy(LEFT_BOARD_BORDER_X + 2, BOTTOM_BOARD_BORDER_Y - 1);
+	putch(BOTTOM_LEFT_LINE_CORNER_CODE);
+
+	gotoxy(RIGHT_BOARD_BORDER_X - 2, TOP_BOARD_BORDER_Y + 1);
+	putch(TOP_RIGHT_LINE_CORNER_CODE);
+
+	gotoxy(RIGHT_BOARD_BORDER_X - 2, BOTTOM_BOARD_BORDER_Y - 1);
+	putch(BOTTOM_RIGHT_LINE_CORNER_CODE);
 }
 
 
-//Player Board::getCurrentPlayer() {
-//	return this->currentPlayer;
-//}
-//
-//
+Player Board::getCurrentPlayer() {
+	return this->currentPlayer;
+}
+
+
 //void Board::insertStone(int x, int y) {
 //	gotoxy(x, y);
 //	
@@ -67,7 +123,7 @@ void Board::insertStone(int x, int y) {
 	textcolor(BLACK);
 	putch('O');
 }
-	
+
 
 //class Board {
 //public:

@@ -26,7 +26,7 @@ void Console::setInitialProgramSettings() {
 void Console::setInitialConsoleSettings(int x, int y) {
 	//gotoxy(48, menu.getMenuRowAndIncrement());
 	//gotoxy(MENU_DISTANCE, 5);
-	gotoxy(48, 10);
+	gotoxy(48, KEY_CODE_ROW);
 	cputs(this->keyCodeText);
 
 	gotoxy(x, y);
