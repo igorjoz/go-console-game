@@ -70,26 +70,8 @@ void Menu::printStaticMenuPart() {
 
 
 void Menu::showBoardSizeSelectionModal(Console console, Cursor cursor) {
-	//console.setCursor(cursorX, cursorY);*/
-
-
-	//int cursorX = 1;
-
-	//cursor.setX(INITIAL_CURSOR_X_POSITION);
-	//cursor.x = 7;
-	//cursor.setY(INITIAL_CURSOR_Y_POSITION);
-
-	//int cursorX = INITIAL_CURSOR_X_POSITION;
 	int cursorX = cursor.getX();
 	int cursorY = cursor.getY();
-
-	// convert cursorX to array of characters
-	char cursorXString[10];
-	_itoa_s(cursorX, cursorXString, 10);
-
-	gotoxy(BOARD_SIZE_SELECTION_MODAL_DISTANCE, 10);
-	cputs(cursorXString);
-
 
 	console.printKeyCode();
 	console.setInitialConsoleSettings(cursorX, cursorY);
@@ -113,9 +95,7 @@ void Menu::showBoardSizeSelectionModal(Console console, Cursor cursor) {
 	cputs("Click ENTER to confirm choice");
 
 
-	// 
 	//console.setInitialConsoleSettings(10, 4);
-
 
 	/*struct text_info textInfo;
 	gettextinfo(&textInfo);
@@ -132,6 +112,15 @@ void Menu::showBoardSizeSelectionModal(Console console, Cursor cursor) {
 	gotoxy(MENU_DISTANCE, 7);
 	cputs("screen height: ");
 	cputs(screenHeightText);*/
+}
+
+
+void Menu::showCustomBoardSizeSelectionModal(Console console, Cursor cursor) {
+	gotoxy(BOARD_SIZE_SELECTION_MODAL_DISTANCE, 4);
+	cputs("Custom board size: ");
+
+	gotoxy(BOARD_SIZE_SELECTION_MODAL_DISTANCE, 2);
+	cputs("Click ENTER to confirm");
 }
 
 

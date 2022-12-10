@@ -1,28 +1,34 @@
 #pragma once
 
+#ifndef BOARD_H
+#define BOARD_H
+
 #include"conio2.h"
 #include <cstdlib>
 #include <string.h>
 
 #include"Player.h"
 #include"Point.h"
-#include"Cursor.h"
+//#include"Cursor.h"
 #include"Console.h"
 #include"constants.h"
+
+
+class Cursor;
 
 
 class Board
 {
 public:
-	Board(Player* player1, Player* player2);
+	Board(int size, bool isBoardSizeSelected, Player* player1, Player* player2);
 	Board(const Board& previousBoard);
 
 	void printBoard();
-	void static printTopAndBottomBorder();
-	void static printLeftAndRightBorder();
-	void static printBoardStructure();
-	void static printBorderCorners();
-	void static printBoardCorners();
+	void printTopAndBottomBorder();
+	void printLeftAndRightBorder();
+	void printBoardStructure();
+	void printBorderCorners();
+	void printBoardCorners();
 	void printBoardState();
 	void printIsInGameEditorMode();
 
@@ -34,6 +40,9 @@ public:
 	void incrementCurrentPlayerScore();
 	Player* getCurrentPlayer();
 	int getCurrentPlayerId();
+	Player* getPlayer1();
+	Player* getPlayer2();
+	
 
 	void restartGame(Console console, Cursor cursor);
 	bool getIsInGameEditorMode();
@@ -53,9 +62,18 @@ public:
 	char* getCurrentPlayerText();
 	char* getPlayersScoreText();
 
-	void handleBoardSizeSelection(Cursor cursor);
+	int interpretBoardSizeSelection(Cursor cursor);
 	int getSize();
 	void setSize(int size);
+
+	int getTopBoardBorderY();
+	void setTopBoardBorderY(int y);
+	int getBottomBoardBorderY();
+	void setBottomBoardBorderY(int y);
+	int getLeftBoardBorderX();
+	void setLeftBoardBorderX(int x);
+	int getRightBoardBorderX();
+	void setRightBoardBorderX(int x);
 
 private:
 	int size;
@@ -65,4 +83,11 @@ private:
 	Player* player1;
 	Player* player2;
 	Player* currentPlayer;
+
+	int topBoardBorderY = VERTICAL_BOARD_PADDING + 1;
+	int bottomBoardBorderY = BOARD_SIZE + VERTICAL_BOARD_PADDING + 2;
+	int leftBoardBorderX = HORIZONTAL_BOARD_PADDING + 1;
+	int rightBoardBorderX = (BOARD_SIZE * 2) + HORIZONTAL_BOARD_PADDING + 3;
 };
+
+#endif

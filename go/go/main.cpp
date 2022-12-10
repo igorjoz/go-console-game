@@ -14,16 +14,13 @@ int main() {
 	Player player1(WHITE_PLAYER_ID);
 	Player player2(BLACK_PLAYER_ID);
 
-	Board board(&player1, &player2);
+	Board board(BOARD_SIZE, false, &player1, &player2);
 	Menu menu;
 	Cursor cursor;
 	Console console;
 
 	Console::setInitialProgramSettings();
 
-	// reset cursor
-	/*cursor.setX(INITIAL_CURSOR_X_POSITION);
-	cursor.setY(INITIAL_CURSOR_Y_POSITION);*/
 	cursor.resetToInitialPosition();
 
 	do {
@@ -48,12 +45,15 @@ int main() {
 			else if (console.getKeyCode() == ENTER_KEY_CODE or console.getKeyCode() == '\r') {
 				board.setIsBoardSizeSelected(true);
 				cursor.setShouldResetPosition(true);
-				board.handleBoardSizeSelection(cursor);
+				int newSize = board.interpretBoardSizeSelection(cursor);
+
+				if (newSize == -1) {
+					menu.showCustomBoardSizeSelectionModal(console, cursor);
+				}
+				else {
+					board = Board(newSize, true, board.getPlayer1(), board.getPlayer2());
+				}
 			}
-			//else if (console.getKeyCode() == 0x74) {
-			//	gotoxy(BOARD_SIZE_SELECTION_MODAL_DISTANCE, 2);
-			//	cputs("test");
-			//}
 		}
 		else {
 			if (cursor.getShouldResetPosition()) {

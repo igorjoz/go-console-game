@@ -1,10 +1,16 @@
 #include "Board.h"
 
 
-Board::Board(Player* player1, Player* player2) {
-	this->size = BOARD_SIZE;
+#include"Cursor.h"
+
+
+Board::Board(int size, bool isBoardSizeSelected, Player* player1, Player* player2) {
+	this->size = size;
 	this->isInEditorMode = false;
-	this->isBoardSizeSelected = false;
+	this->isBoardSizeSelected = isBoardSizeSelected;
+
+	this->bottomBoardBorderY = size + VERTICAL_BOARD_PADDING + 2;
+	this->rightBoardBorderX = size * 2 + HORIZONTAL_BOARD_PADDING + 3;
 
 	board = new short unsigned int* [this->size];
 
@@ -45,13 +51,13 @@ Board::Board(const Board& previousBoard) :
 
 
 void Board::printBoard() {
-	Board::printTopAndBottomBorder();
-	Board::printLeftAndRightBorder();
+	this->printTopAndBottomBorder();
+	this->printLeftAndRightBorder();
 
-	Board::printBoardStructure();
+	this->printBoardStructure();
 
-	Board::printBorderCorners();
-	Board::printBoardCorners();
+	this->printBorderCorners();
+	this->printBoardCorners();
 
 	this->printBoardState();
 }
@@ -298,21 +304,30 @@ int Board::getCurrentPlayerId() {
 }
 
 
-void Board::handleBoardSizeSelection(Cursor cursor) {
+Player* Board::getPlayer1() {
+	return this->player1;
+}
+
+
+Player* Board::getPlayer2() {
+	return this->player2;
+}
+
+
+int Board::interpretBoardSizeSelection(Cursor cursor) {
 	int x = cursor.getX();
 
-	if (x == BOARD_SIZE_SELECTION_MODAL_DISTANCE) {
-		this->setSize(9);
+	if (x == BOARD_SIZE_SELECTION_MODAL_DISTANCE - 1) {
+		return 9;
 	}
-	else if (x == BOARD_SIZE_SELECTION_MODAL_DISTANCE + 10) {
-		this->setSize(13);
+	else if (x == BOARD_SIZE_SELECTION_MODAL_DISTANCE - 1 + 10) {
+		return 13;
 	}
-	else if (x == BOARD_SIZE_SELECTION_MODAL_DISTANCE + 20) {
-		this->setSize(19);
+	else if (x == BOARD_SIZE_SELECTION_MODAL_DISTANCE - 1 + 20) {
+		return 19;
 	}
 	else {
-		// handle custom size selection
-
+		return -1;
 	}
 }
 
@@ -324,5 +339,59 @@ int Board::getSize() {
 
 void Board::setSize(int size) {
 	this->size = size;
+
+	/*if (this->board != NULL) {
+		for (int i = 0; i < this->size; i++) {
+			delete[] this->board[i];
+		}
+
+		delete[] this->board;
+	}*/
+
+	//this = ;
+	
+	this->board = new short unsigned int* [this->size];
+
+	for (int i = 0; i < this->size; i++) {
+		this->board[i] = new short unsigned int[this->size];
+
+		for (int j = 0; j < this->size; j++) {
+			this->board[i][j] = 0;
+		}
+	}
+	
 	//this->setIsBoardSizeSelected(true);
 }
+
+int Board::getTopBoardBorderY() {
+	return this->topBoardBorderY;
+}
+
+void Board::setTopBoardBorderY(int y) {
+	this->topBoardBorderY = y;
+}
+
+int Board::getBottomBoardBorderY() {
+	return this->bottomBoardBorderY;
+}
+
+void Board::setBottomBoardBorderY(int y) {
+	this->bottomBoardBorderY = y;
+}
+
+int Board::getLeftBoardBorderX() {
+	return this->leftBoardBorderX;
+}
+
+void Board::setLeftBoardBorderX(int x) {
+	this->leftBoardBorderX = x;
+}
+
+int Board::getRightBoardBorderX() {
+	return this->rightBoardBorderX;
+}
+
+void Board::setRightBoardBorderX(int x) {
+	this->rightBoardBorderX = x;
+}
+
