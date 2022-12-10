@@ -20,6 +20,24 @@ Board::Board(Player player1, Player player2) {
 }
 
 
+// copy constructor
+Board::Board(const Board& previousBoard):
+	boardSize(previousBoard.boardSize),
+	currentPlayer(previousBoard.player1),
+	player1(previousBoard.player1),
+	player2(previousBoard.player2) {
+	board = new short unsigned int* [this->boardSize];
+
+	for (int i = 0; i < this->boardSize; i++) {
+		board[i] = new short unsigned int[this->boardSize];
+
+		for (int j = 0; j < this->boardSize; j++) {
+			board[i][j] = 0;
+		}
+	}
+}
+
+
 void Board::printBoard() {
 	Board::printTopAndBottomBorder();
 	Board::printLeftAndRightBorder();
@@ -132,11 +150,11 @@ void Board::printBoardState() {
 			gotoxy(columnIndex, rowIndex);
 
 			if (boardValue == 1) {
-				textcolor(GREEN);
+				textcolor(LIGHTGRAY);
 				putch('O');
 			}
 			else if (boardValue == 2) {
-				textcolor(BLUE);
+				textcolor(LIGHTBLUE);
 				putch('O');
 			}
 
@@ -146,14 +164,15 @@ void Board::printBoardState() {
 }
 
 
-Player Board::getCurrentPlayer() {
-	return this->currentPlayer;
-}
-
-
 void Board::insertStone(int cursorX, int cursorY) {
 	cursorX = wherex();
 	cursorY = wherey();
+
+	int boardValue = this->getBoardValue(cursorX, cursorY);
+
+	if (boardValue != 0) {
+		return;
+	}
 	
 	if (this->currentPlayer.getId() == 1) {
 		this->setBoardValue(cursorX, cursorY, 1);
@@ -204,6 +223,11 @@ int Board::getColumnIndex(int cursorX) {
 }
 
 
+void Board::newGame() {
+	*this = Board(*this);
+}
+
+
 void Board::changePlayer() {
 	if (this->currentPlayer.getId() == 1) {
 		this->currentPlayer = this->player2;
@@ -211,6 +235,11 @@ void Board::changePlayer() {
 	else if (this->currentPlayer.getId() == 2) {
 		this->currentPlayer = this->player1;
 	}
+}
+
+
+Player Board::getCurrentPlayer() {
+	return this->currentPlayer;
 }
 
 

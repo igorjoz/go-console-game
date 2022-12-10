@@ -14,6 +14,7 @@ class Board
 {
 public:
 	Board(Player player1, Player player2);
+	Board(const Board& previousBoard);
 	void printBoard();
 	void static printTopAndBottomBorder();
 	void static printLeftAndRightBorder();
@@ -27,6 +28,7 @@ public:
 	char* getBoardPositionText(int cursorX, int cursorY);
 	int getColumnIndex(int cursorX);
 	int getRowIndex(int cursorY);
+	void newGame();
 	void changePlayer();
 	Player getCurrentPlayer();
 

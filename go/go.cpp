@@ -14,8 +14,8 @@ int const ENTER_KEY_CODE = 0x0d;
 
 
 int main() {
-	Player player1(1);
-	Player player2(2);
+	Player player1(WHITE_PLAYER_ID);
+	Player player2(BLACK_PLAYER_ID);
 	
 	Board board(player1, player2);
 	Menu menu;
@@ -38,8 +38,11 @@ int main() {
 
 			cursor.moveCursor(console.getKeyCode());
 		}
-		else if (console.getKeyCode() == I_KEY_CODE) {
+		else if (console.getKeyCode() == INSERT_STONE_KEY_CHARACTER) {
 			board.insertStone(cursor.getX(), cursor.getY());
+		}
+		else if (console.getKeyCode() == NEW_GAME_KEY_CHARACTER) {
+			board.newGame();
 		}
 		else if (console.getKeyCode() == ' ') {
 			console.setNextTextColor();

@@ -14,6 +14,9 @@ void Menu::printMenu(Console console, Board board, Cursor cursor) {
 
 	int cursorX = cursor.getX();
 	int cursorY = cursor.getY();
+
+	textcolor(WHITE);
+	textbackground(BLACK);
 	
 	this->printStaticMenuPart();
 
@@ -46,6 +49,9 @@ void Menu::printStaticMenuPart() {
 
 	gotoxy(MENU_DISTANCE, this->incrementMenuRow());
 	cputs("q        -> exit game");
+
+	gotoxy(MENU_DISTANCE, this->incrementMenuRow());
+	cputs("n        -> new game");
 
 	gotoxy(MENU_DISTANCE, this->incrementMenuRow());
 	cputs("arrows	-> moving");
