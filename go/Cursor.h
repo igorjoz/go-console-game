@@ -1,7 +1,10 @@
 #pragma once
 
+#include <cstdlib>
+#include <string.h>
+
 #include "conio2.h"
-#include "Board.h"
+#include "constants.h"
 
 
 int const LEFT_ARROW_KEY_CODE = 0x4b;
@@ -18,6 +21,7 @@ class Cursor
 public:
 	Cursor();
 	void moveCursor(int keyCode);
+	char* getCursorPositionText();
 	int getX();
 	int getY();
 

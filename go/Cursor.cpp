@@ -23,6 +23,22 @@ void Cursor::moveCursor(int keyCode) {
 }
 
 
+char* Cursor::getCursorPositionText() {
+	char xCoordinate[32], yCoordinate[32];
+	
+	_itoa_s(this->getX(), xCoordinate, 10);
+	_itoa_s(this->getY(), yCoordinate, 10);
+
+	char* cursorPositionText = new char[32];
+	strcpy_s(cursorPositionText, 32, "x: ");
+	strcat_s(cursorPositionText, 32, xCoordinate);
+	strcat_s(cursorPositionText, 32, " y: ");
+	strcat_s(cursorPositionText, 32, yCoordinate);
+	
+	return cursorPositionText;
+}
+
+
 int Cursor::getX() {
 	return this->x;
 }

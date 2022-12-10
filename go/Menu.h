@@ -16,6 +16,7 @@ class Menu
 public:
 	Menu();
 	void printMenu(Console console, Board border, Cursor cursor);
+	void printStaticMenuPart();
 	int incrementMenuRow();
 	void restartMenuRow();
 

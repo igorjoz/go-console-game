@@ -153,9 +153,14 @@
     <ClInclude Include="conio2.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="Cursor.h" />
+    <ClInclude Include="constants.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="go.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

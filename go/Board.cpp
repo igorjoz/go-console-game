@@ -3,8 +3,12 @@
 
 Board::Board(Player player1, Player player2) {
 	this->boardSize = BOARD_SIZE;
+
+	board = new short unsigned int* [this->boardSize];
 	
 	for (int i = 0; i < this->boardSize; i++) {
+		board[i] = new short unsigned int[this->boardSize];
+		
 		for (int j = 0; j < this->boardSize; j++) {
 			board[i][j] = 0;
 		}
@@ -27,6 +31,7 @@ void Board::printBoard() {
 
 	this->printBoardState();
 }
+
 
 void Board::printTopAndBottomBorder() {
 	for (int columnIndex = LEFT_BOARD_BORDER_X + 1; columnIndex <= RIGHT_BOARD_BORDER_X - 1; columnIndex++) {
@@ -53,6 +58,7 @@ void Board::printTopAndBottomBorder() {
 	}
 }
 
+
 void Board::printLeftAndRightBorder() {
 	for (int rowIndex = TOP_BOARD_BORDER_Y + 1; rowIndex <= BOTTOM_BOARD_BORDER_Y - 1; rowIndex++) {
 		gotoxy(LEFT_BOARD_BORDER_X, rowIndex);
@@ -68,6 +74,7 @@ void Board::printLeftAndRightBorder() {
 		putch(RIGHT_INTERSECTION_CHARACTER_CODE);
 	}
 }
+
 
 void Board::printBoardStructure() {
 	for (int rowIndex = TOP_BOARD_BORDER_Y + 2; rowIndex < BOTTOM_BOARD_BORDER_Y - 1; rowIndex++) {
@@ -86,6 +93,7 @@ void Board::printBoardStructure() {
 	}
 }
 
+
 void Board::printBorderCorners() {
 	gotoxy(LEFT_BOARD_BORDER_X, TOP_BOARD_BORDER_Y);
 	putch(TOP_LEFT_DOUBLE_LINE_CORNER_CODE);
@@ -99,6 +107,7 @@ void Board::printBorderCorners() {
 	gotoxy(RIGHT_BOARD_BORDER_X, BOTTOM_BOARD_BORDER_Y);
 	putch(BOTTOM_RIGHT_DOUBLE_LINE_CORNER_CODE);
 }
+
 
 void Board::printBoardCorners() {
 	gotoxy(LEFT_BOARD_BORDER_X + 2, TOP_BOARD_BORDER_Y + 1);
@@ -114,16 +123,17 @@ void Board::printBoardCorners() {
 	putch(BOTTOM_RIGHT_LINE_CORNER_CODE);
 }
 
+
 void Board::printBoardState() {
 	for (int rowIndex = TOP_BOARD_BORDER_Y + 1; rowIndex < BOTTOM_BOARD_BORDER_Y; rowIndex++) {
 		for (int columnIndex = LEFT_BOARD_BORDER_X + 2; columnIndex < RIGHT_BOARD_BORDER_X; columnIndex += 2) {
-			int boardValue = this->getBoardValueByCursorPosition(columnIndex, rowIndex);
+			int boardValue = this->getBoardValue(columnIndex, rowIndex);
 
 			gotoxy(columnIndex, rowIndex);
 
 			if (boardValue == 1) {
 				textcolor(GREEN);
-				//putch('O');
+				putch('O');
 			}
 			else if (boardValue == 2) {
 				textcolor(BLUE);
@@ -141,32 +151,58 @@ Player Board::getCurrentPlayer() {
 }
 
 
-void Board::insertStone(int x, int y) {
-	gotoxy(x, y);
+void Board::insertStone(int cursorX, int cursorY) {
+	cursorX = wherex();
+	cursorY = wherey();
 	
 	if (this->currentPlayer.getId() == 1) {
-		this->setBoardValueByCursorPosition(x, y, 1);
-		
-		//textcolor(BLACK);
-		//putch('O');
+		this->setBoardValue(cursorX, cursorY, 1);
 	}
 	else if (this->currentPlayer.getId() == 2) {
-		this->setBoardValueByCursorPosition(x, y, 2);
-		
-		//textcolor(WHITE);
-		//putch('O');
+		this->setBoardValue(cursorX, cursorY, 2);
 	}
 
 	this->changePlayer();
 }
 
-int Board::getBoardValueByCursorPosition(int x, int y) {
-	return this->board[(y - TOP_BOARD_BORDER_Y - 1) / 2][(x - LEFT_BOARD_BORDER_X - 2) / 2];
+
+int Board::getBoardValue(int x, int y) {
+	return this->board[this->getRowIndex(y)][this->getColumnIndex(x)];
 }
 
-void Board::setBoardValueByCursorPosition(int x, int y, int value) {
-	this->board[(y - TOP_BOARD_BORDER_Y - 1) / 2][(x - LEFT_BOARD_BORDER_X - 2) / 2] = value;
+
+void Board::setBoardValue(int cursorX, int cursorY, short unsigned int value) {
+	this->board[this->getRowIndex(cursorY)][this->getColumnIndex(cursorX)] = value;
 }
+
+
+char* Board::getBoardPositionText(int cursorX, int cursorY) {
+	char boardRow[32], boardColumn[32];
+	int rowIndex = this->getRowIndex(cursorY);
+	int columnIndex = this->getColumnIndex(cursorX);
+
+	_itoa_s(rowIndex, boardRow, 10);
+	_itoa_s(columnIndex, boardColumn, 10);
+
+	char* boardPositionText = new char[32];
+	strcpy_s(boardPositionText, 32, "row: ");
+	strcat_s(boardPositionText, 32, boardRow);
+	strcat_s(boardPositionText, 32, ", column: ");
+	strcat_s(boardPositionText, 32, boardColumn);
+	
+	return boardPositionText;
+}
+
+
+int Board::getRowIndex(int cursorY) {
+	return (cursorY - TOP_BOARD_BORDER_Y - 1);
+}
+
+
+int Board::getColumnIndex(int cursorX) {
+	return (cursorX - LEFT_BOARD_BORDER_X - 2) / 2;
+}
+
 
 void Board::changePlayer() {
 	if (this->currentPlayer.getId() == 1) {
