@@ -5,6 +5,7 @@
 
 Menu::Menu() {
 	this->menuRowY = TOP_BOARD_BORDER_Y + 1;
+	this->shouldDisplayCustomBoardSizeSelectionModal = false;
 }
 
 
@@ -116,11 +117,11 @@ void Menu::showBoardSizeSelectionModal(Console console, Cursor cursor) {
 
 
 void Menu::showCustomBoardSizeSelectionModal(Console console, Cursor cursor) {
-	gotoxy(BOARD_SIZE_SELECTION_MODAL_DISTANCE, 4);
-	cputs("Custom board size: ");
-
 	gotoxy(BOARD_SIZE_SELECTION_MODAL_DISTANCE, 2);
 	cputs("Click ENTER to confirm");
+	
+	gotoxy(BOARD_SIZE_SELECTION_MODAL_DISTANCE, 4);
+	cputs("Custom board size: ");
 }
 
 
@@ -131,4 +132,12 @@ int Menu::incrementMenuRow() {
 
 void Menu::restartMenuRow() {
 	this->menuRowY = TOP_BOARD_BORDER_Y + 1;
+}
+
+bool Menu::getShouldDisplayCustomBoardSizeSelectionModal() {
+	return this->shouldDisplayCustomBoardSizeSelectionModal;
+}
+
+void Menu::setShouldDisplayCustomBoardSizeSelectionModal(bool shouldDisplayCustomBoardSizeSelectionModal) {
+	this->shouldDisplayCustomBoardSizeSelectionModal = shouldDisplayCustomBoardSizeSelectionModal;
 }

@@ -326,9 +326,8 @@ int Board::interpretBoardSizeSelection(Cursor cursor) {
 	else if (x == BOARD_SIZE_SELECTION_MODAL_DISTANCE - 1 + 20) {
 		return 19;
 	}
-	else {
-		return -1;
-	}
+	
+	return -1;
 }
 
 

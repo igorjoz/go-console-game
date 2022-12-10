@@ -20,7 +20,11 @@ public:
 	int incrementMenuRow();
 	void restartMenuRow();
 
+	bool getShouldDisplayCustomBoardSizeSelectionModal();
+	void setShouldDisplayCustomBoardSizeSelectionModal(bool shouldDisplayCustomBoardSizeSelectionModal);
+
 private:
 	int menuRowY;
+	bool shouldDisplayCustomBoardSizeSelectionModal;
 };
 
