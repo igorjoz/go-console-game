@@ -24,9 +24,23 @@ int main() {
 
 	Console::setInitialProgramSettings();
 
-	board.setIsInGameEditorMode(false);
-
 	do {
+		/*if (!board.getIsBoardSizeSelected()) {
+			menu.showBoardSizeSelectionModal();
+
+			console.setIsZeroFirstKeyCode(false);
+			console.setKeyCode(getch());
+
+			if (console.getKeyCode() == 0) {
+				console.setIsZeroFirstKeyCode(true);
+				console.setKeyCode(getch());
+
+				cursor.moveCursor(console.getKeyCode());
+			}
+
+			continue;
+		}*/
+
 		console.refreshSettings();
 		board.printBoard();
 		menu.printMenu(console, board, cursor);

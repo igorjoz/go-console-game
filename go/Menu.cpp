@@ -70,6 +70,37 @@ void Menu::printStaticMenuPart() {
 }
 
 
+void Menu::showBoardSizeSelectionModal() {
+	gotoxy(MENU_DISTANCE, 1);
+	cputs("9x9");
+
+	gotoxy(MENU_DISTANCE, 2);
+	cputs("13x13");
+
+	gotoxy(MENU_DISTANCE, 3);
+	cputs("19x19");
+
+	gotoxy(MENU_DISTANCE, 4);
+	cputs("custom");
+
+	/*struct text_info textInfo;
+	gettextinfo(&textInfo);
+
+	char screenWidthText[100];
+	char screenHeightText[100];
+	_itoa_s(textInfo.screenwidth, screenWidthText, 10);
+	_itoa_s(textInfo.screenheight, screenHeightText, 10);
+	
+	gotoxy(MENU_DISTANCE, 6);
+	cputs("screen width: ");
+	cputs(screenWidthText);
+
+	gotoxy(MENU_DISTANCE, 7);
+	cputs("screen height: ");
+	cputs(screenHeightText);*/
+}
+
+
 int Menu::incrementMenuRow() {
 	return this->menuRowY++;
 }

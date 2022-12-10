@@ -37,6 +37,8 @@ public:
 	void restartGame();
 	bool getIsInGameEditorMode();
 	void setIsInGameEditorMode(bool isInEditorMode);
+	bool getIsBoardSizeSelected();
+	void setIsBoardSizeSelected(bool isBoardSizeSelected);
 	
 	int getBoardValueByCursorPosition(int cursorX, int cursorY);
 	void setBoardValueByCursorPosition(int cursorX, int cursorY, short unsigned int value);
@@ -53,6 +55,7 @@ public:
 private:
 	int boardSize;
 	bool isInEditorMode;
+	bool isBoardSizeSelected;
 	short unsigned int **board;
 	Player* player1;
 	Player* player2;

@@ -14,6 +14,8 @@ public:
 	Menu();
 	void printMenu(Console console, Board border, Cursor cursor);
 	void printStaticMenuPart();
+	void showBoardSizeSelectionModal();
+
 	int incrementMenuRow();
 	void restartMenuRow();
 

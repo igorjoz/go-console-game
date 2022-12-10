@@ -113,10 +113,8 @@ void Board::printBoardState() {
 }
 
 void Board::printIsInGameEditorMode() {
-	//bool isInGameEditorMode = this->getIsInGameEditorMode();
-	
-	if (this->isInEditorMode) {
+	/*if (this->isInEditorMode) {
 		gotoxy(LEFT_BOARD_BORDER_X, 1);
 		cputs("Game Editor Mode: ON");
-	}
+	}*/
 }

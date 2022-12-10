@@ -4,6 +4,7 @@
 Board::Board(Player* player1, Player* player2) {
 	this->boardSize = BOARD_SIZE;
 	this->isInEditorMode = false;
+	this->isBoardSizeSelected = false;
 
 	board = new short unsigned int* [this->boardSize];
 	
@@ -27,9 +28,11 @@ Board::Board(const Board& previousBoard):
 	player1(previousBoard.player1),
 	player2(previousBoard.player2) {
 	
-	board = new short unsigned int* [this->boardSize];
-	//this->isInEditorMode = false;
+	this->isInEditorMode = false;
+	this->isBoardSizeSelected = false;
 	this->currentPlayer = this->player1;
+
+	board = new short unsigned int* [this->boardSize];
 
 	for (int i = 0; i < this->boardSize; i++) {
 		board[i] = new short unsigned int[this->boardSize];
@@ -249,6 +252,16 @@ bool Board::getIsInGameEditorMode() {
 
 void Board::setIsInGameEditorMode(bool isInEditorMode) {
 	this->isInEditorMode = isInEditorMode;
+}
+
+
+bool Board::getIsBoardSizeSelected() {
+	return this->isBoardSizeSelected;
+}
+
+
+void Board::setIsBoardSizeSelected(bool isBoardSizeSelected) {
+	this->isBoardSizeSelected = isBoardSizeSelected;
 }
 
 
