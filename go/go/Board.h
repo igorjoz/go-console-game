@@ -16,7 +16,7 @@ class Board
 public:
 	Board(Player* player1, Player* player2);
 	Board(const Board& previousBoard);
-	
+
 	void printBoard();
 	void static printTopAndBottomBorder();
 	void static printLeftAndRightBorder();
@@ -25,7 +25,7 @@ public:
 	void static printBoardCorners();
 	void printBoardState();
 	void printIsInGameEditorMode();
-	
+
 	void insertStone();
 	bool canInsertStone(int x, int y);
 	void removeStonesWithNoLiberties();
@@ -40,12 +40,12 @@ public:
 	void setIsInGameEditorMode(bool isInEditorMode);
 	bool getIsBoardSizeSelected();
 	void setIsBoardSizeSelected(bool isBoardSizeSelected);
-	
+
 	int getBoardValueByCursorPosition(int cursorX, int cursorY);
 	void setBoardValueByCursorPosition(int cursorX, int cursorY, short unsigned int value);
 	int getBoardValue(int x, int y);
 	void setBoardValue(int x, int y, short unsigned int value);
-	
+
 	int getColumnIndex(int cursorX);
 	int getRowIndex(int cursorY);
 
@@ -54,13 +54,14 @@ public:
 	char* getPlayersScoreText();
 
 	void handleBoardSizeSelection(Cursor cursor);
+	int getSize();
 	void setSize(int size);
 
 private:
 	int size;
 	bool isInEditorMode;
 	bool isBoardSizeSelected;
-	short unsigned int **board;
+	short unsigned int** board;
 	Player* player1;
 	Player* player2;
 	Player* currentPlayer;

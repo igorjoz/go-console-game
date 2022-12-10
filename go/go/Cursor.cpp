@@ -36,7 +36,7 @@ void Cursor::moveCursorInBoardSizeSelectionModal(int keyCode) {
 
 char* Cursor::getCursorPositionText() {
 	char xCoordinate[32], yCoordinate[32];
-	
+
 	_itoa_s(this->getX(), xCoordinate, 10);
 	_itoa_s(this->getY(), yCoordinate, 10);
 
@@ -45,7 +45,7 @@ char* Cursor::getCursorPositionText() {
 	strcat_s(cursorPositionText, 32, xCoordinate);
 	strcat_s(cursorPositionText, 32, " y: ");
 	strcat_s(cursorPositionText, 32, yCoordinate);
-	
+
 	return cursorPositionText;
 }
 

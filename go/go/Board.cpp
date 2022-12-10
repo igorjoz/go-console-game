@@ -7,15 +7,15 @@ Board::Board(Player* player1, Player* player2) {
 	this->isBoardSizeSelected = false;
 
 	board = new short unsigned int* [this->size];
-	
+
 	for (int i = 0; i < this->size; i++) {
 		board[i] = new short unsigned int[this->size];
-		
+
 		for (int j = 0; j < this->size; j++) {
 			board[i][j] = 0;
 		}
 	}
-	
+
 	this->player1 = player1;
 	this->player2 = player2;
 	this->currentPlayer = player1;
@@ -23,11 +23,11 @@ Board::Board(Player* player1, Player* player2) {
 
 
 // copy constructor
-Board::Board(const Board& previousBoard):
+Board::Board(const Board& previousBoard) :
 	size(previousBoard.size),
 	player1(previousBoard.player1),
 	player2(previousBoard.player2) {
-	
+
 	this->isInEditorMode = false;
 	this->isBoardSizeSelected = false;
 	this->currentPlayer = this->player1;
@@ -89,7 +89,7 @@ char* Board::getBoardPositionText(int cursorX, int cursorY) {
 	strcat_s(boardPositionText, 32, boardRow);
 	strcat_s(boardPositionText, 32, ", column: ");
 	strcat_s(boardPositionText, 32, boardColumn);
-	
+
 	return boardPositionText;
 }
 
@@ -124,7 +124,7 @@ char* Board::getPlayersScoreText() {
 
 	strcpy_s(playersScoreText, 32, "white: ");
 	strcat_s(playersScoreText, 32, whitePlayerScoreText);
-	
+
 	strcat_s(playersScoreText, 32, ", black: ");
 	strcat_s(playersScoreText, 32, blackPlayerScoreText);
 
@@ -172,7 +172,7 @@ void Board::insertStone() {
 
 bool Board::canInsertStone(int x, int y) {
 	int boardValue = this->getBoardValueByCursorPosition(x, y);
-	
+
 	if (boardValue != 0) {
 		return false;
 	}
@@ -235,7 +235,7 @@ bool Board::hasLiberty(int rowIndex, int columnIndex) {
 			totalLiberties++;
 		}
 	}
-	
+
 	return totalLiberties > 0;
 }
 
@@ -273,7 +273,7 @@ void Board::setIsBoardSizeSelected(bool isBoardSizeSelected) {
 
 void Board::changePlayer() {
 	int currentPlayerId = this->getCurrentPlayerId();
-	
+
 	if (currentPlayerId == WHITE_PLAYER_ID) {
 		this->currentPlayer = this->player2;
 	}
@@ -300,7 +300,7 @@ int Board::getCurrentPlayerId() {
 
 void Board::handleBoardSizeSelection(Cursor cursor) {
 	int x = cursor.getX();
-	
+
 	if (x == BOARD_SIZE_SELECTION_MODAL_DISTANCE) {
 		this->setSize(9);
 	}
@@ -312,6 +312,17 @@ void Board::handleBoardSizeSelection(Cursor cursor) {
 	}
 	else {
 		// handle custom size selection
-		
+
 	}
+}
+
+
+int Board::getSize() {
+	return this->size;
+}
+
+
+void Board::setSize(int size) {
+	this->size = size;
+	//this->setIsBoardSizeSelected(true);
 }

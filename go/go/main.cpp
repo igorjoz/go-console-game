@@ -13,7 +13,7 @@
 int main() {
 	Player player1(WHITE_PLAYER_ID);
 	Player player2(BLACK_PLAYER_ID);
-	
+
 	Board board(&player1, &player2);
 	Menu menu;
 	Cursor cursor;
@@ -30,12 +30,12 @@ int main() {
 		if (cursor.getShouldResetPosition()) {
 			cursor.resetToInitialPosition();
 		}
-		
+
 		console.refreshSettings();
-		
+
 		if (!board.getIsBoardSizeSelected()) {
 			menu.showBoardSizeSelectionModal(console, cursor);
-			
+
 			console.setIsZeroFirstKeyCode(false);
 			console.setKeyCode(getch());
 

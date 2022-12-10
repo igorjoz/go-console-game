@@ -16,7 +16,7 @@ void Menu::printMenu(Console console, Board board, Cursor cursor) {
 
 	textcolor(WHITE);
 	textbackground(BLACK);
-	
+
 	this->printStaticMenuPart();
 
 	this->incrementMenuRow();
@@ -39,7 +39,7 @@ void Menu::printMenu(Console console, Board board, Cursor cursor) {
 }
 
 
-void Menu::printStaticMenuPart() {	
+void Menu::printStaticMenuPart() {
 	gotoxy(MENU_DISTANCE, this->incrementMenuRow());
 	cputs("i        -> insert a stone");
 
@@ -72,7 +72,7 @@ void Menu::printStaticMenuPart() {
 void Menu::showBoardSizeSelectionModal(Console console, Cursor cursor) {
 	//console.setCursor(cursorX, cursorY);*/
 
-	
+
 	//int cursorX = 1;
 
 	//cursor.setX(INITIAL_CURSOR_X_POSITION);
@@ -89,14 +89,14 @@ void Menu::showBoardSizeSelectionModal(Console console, Cursor cursor) {
 
 	gotoxy(BOARD_SIZE_SELECTION_MODAL_DISTANCE, 10);
 	cputs(cursorXString);
-	
+
 
 	console.printKeyCode();
 	console.setInitialConsoleSettings(cursorX, cursorY);
-	
+
 	gotoxy(BOARD_SIZE_SELECTION_MODAL_DISTANCE, 2);
 	cputs("Board size selection");
-	
+
 	gotoxy(BOARD_SIZE_SELECTION_MODAL_DISTANCE, 4);
 	cputs("9x9");
 
@@ -112,11 +112,11 @@ void Menu::showBoardSizeSelectionModal(Console console, Cursor cursor) {
 	gotoxy(BOARD_SIZE_SELECTION_MODAL_DISTANCE, 6);
 	cputs("Click ENTER to confirm choice");
 
-	
+
 	// 
 	//console.setInitialConsoleSettings(10, 4);
 
-	
+
 	/*struct text_info textInfo;
 	gettextinfo(&textInfo);
 
@@ -124,7 +124,7 @@ void Menu::showBoardSizeSelectionModal(Console console, Cursor cursor) {
 	char screenHeightText[100];
 	_itoa_s(textInfo.screenwidth, screenWidthText, 10);
 	_itoa_s(textInfo.screenheight, screenHeightText, 10);
-	
+
 	gotoxy(MENU_DISTANCE, 6);
 	cputs("screen width: ");
 	cputs(screenWidthText);
