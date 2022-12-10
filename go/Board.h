@@ -13,8 +13,9 @@
 class Board
 {
 public:
-	Board(Player player1, Player player2);
+	Board(Player* player1, Player* player2);
 	Board(const Board& previousBoard);
+	
 	void printBoard();
 	void static printTopAndBottomBorder();
 	void static printLeftAndRightBorder();
@@ -22,19 +23,38 @@ public:
 	void static printBorderCorners();
 	void static printBoardCorners();
 	void printBoardState();
-	void insertStone(int cursorX, int cursorY);
+	void printIsInGameEditorMode();
+	
+	void insertStone();
+	bool canInsertStone(int x, int y);
+	void removeStonesWithNoLiberties();
+	bool hasLiberty(int rowIndex, int columnIndex);
+	void changePlayer();
+	void incrementCurrentPlayerScore();
+	Player* getCurrentPlayer();
+	int getCurrentPlayerId();
+
+	void restartGame();
+	bool getIsInGameEditorMode();
+	void setIsInGameEditorMode(bool isInEditorMode);
+	
+	int getBoardValueByCursorPosition(int cursorX, int cursorY);
+	void setBoardValueByCursorPosition(int cursorX, int cursorY, short unsigned int value);
 	int getBoardValue(int x, int y);
 	void setBoardValue(int x, int y, short unsigned int value);
-	char* getBoardPositionText(int cursorX, int cursorY);
+	
 	int getColumnIndex(int cursorX);
 	int getRowIndex(int cursorY);
-	void newGame();
-	void changePlayer();
-	Player getCurrentPlayer();
+
+	char* getBoardPositionText(int cursorX, int cursorY);
+	char* getCurrentPlayerText();
+	char* getPlayersScoreText();
 
 private:
 	int boardSize;
+	bool isInEditorMode;
 	short unsigned int **board;
-	Player currentPlayer;
-	Player player1, player2;
+	Player* player1;
+	Player* player2;
+	Player* currentPlayer;
 };

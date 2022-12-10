@@ -3,9 +3,7 @@
 #include "conio2.h"
 #include<stdio.h>
 
-
-char const AUTHOR_NAME_SURNAME_INDEX[30] = "Igor Jozefowicz, 193257";
-int const KEY_CODE_ROW = 13;
+#include "constants.h"
 
 
 class Console

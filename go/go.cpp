@@ -17,12 +17,14 @@ int main() {
 	Player player1(WHITE_PLAYER_ID);
 	Player player2(BLACK_PLAYER_ID);
 	
-	Board board(player1, player2);
+	Board board(&player1, &player2);
 	Menu menu;
 	Cursor cursor;
 	Console console;
 
 	Console::setInitialProgramSettings();
+
+	board.setIsInGameEditorMode(false);
 
 	do {
 		console.refreshSettings();
@@ -39,10 +41,14 @@ int main() {
 			cursor.moveCursor(console.getKeyCode());
 		}
 		else if (console.getKeyCode() == INSERT_STONE_KEY_CHARACTER) {
-			board.insertStone(cursor.getX(), cursor.getY());
+			board.insertStone();
 		}
 		else if (console.getKeyCode() == NEW_GAME_KEY_CHARACTER) {
-			board.newGame();
+			board.restartGame();
+		}
+		else if (console.getKeyCode() == ENTER_EXIT_GAME_EDITOR_KEY_CHARACTER) {
+			bool newState = !board.getIsInGameEditorMode();
+			board.setIsInGameEditorMode(newState);
 		}
 		else if (console.getKeyCode() == ' ') {
 			console.setNextTextColor();

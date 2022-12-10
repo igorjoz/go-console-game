@@ -27,23 +27,20 @@ void Menu::printMenu(Console console, Board board, Cursor cursor) {
 	gotoxy(MENU_DISTANCE, this->incrementMenuRow());
 	cputs(board.getBoardPositionText(cursorX, cursorY));
 
-	char currentPlayerText[32] = "current player: ";
-	if (board.getCurrentPlayer().getId() == WHITE_PLAYER_ID) {
-		strcat_s(currentPlayerText, "white");
-	}
-	else {
-		strcat_s(currentPlayerText, "black");
-	}
+	gotoxy(MENU_DISTANCE, this->incrementMenuRow());
+	cputs(board.getCurrentPlayerText());
 
 	gotoxy(MENU_DISTANCE, this->incrementMenuRow());
-	cputs(currentPlayerText);
+	cputs(board.getPlayersScoreText());
+
+	board.printIsInGameEditorMode();
 
 	console.printKeyCode();
 	console.setInitialConsoleSettings(cursor.getX(), cursor.getY());
 }
 
 
-void Menu::printStaticMenuPart() {
+void Menu::printStaticMenuPart() {	
 	gotoxy(MENU_DISTANCE, this->incrementMenuRow());
 	cputs("i        -> insert a stone");
 
@@ -54,7 +51,16 @@ void Menu::printStaticMenuPart() {
 	cputs("n        -> new game");
 
 	gotoxy(MENU_DISTANCE, this->incrementMenuRow());
-	cputs("arrows	-> moving");
+	cputs("s        -> save game");
+
+	gotoxy(MENU_DISTANCE, this->incrementMenuRow());
+	cputs("l        -> load game");
+
+	gotoxy(MENU_DISTANCE, this->incrementMenuRow());
+	cputs("e        -> enter / exit game editor");
+
+	gotoxy(MENU_DISTANCE, this->incrementMenuRow());
+	cputs("arrows	-> move cursor");
 
 	gotoxy(MENU_DISTANCE, this->incrementMenuRow());
 	cputs("space    -> change color");

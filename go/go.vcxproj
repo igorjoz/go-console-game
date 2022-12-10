@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="BoardPrintService.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="go.cpp" />

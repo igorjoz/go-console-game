@@ -8,9 +8,6 @@
 #include"Player.h"
 
 
-int const MENU_DISTANCE = 48;
-
-
 class Menu
 {
 public:

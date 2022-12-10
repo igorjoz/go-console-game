@@ -1,11 +1,7 @@
 #include "Player.h"
 
-Player::Player() {
-	this->id = 0;
-	this->score = 0;
-}
 
-Player::Player(int id = 1) {
+Player::Player(int id) {
     if (id != 1 and id != 2) {
 		throw "Invalid player id";
     }
@@ -17,4 +13,16 @@ Player::Player(int id = 1) {
 
 int Player::getId() {
 	return this->id;
+}
+
+
+int Player::getScore() {
+	return this->score;
+}
+
+
+int Player::incrementScore() {
+	this->score++;
+	
+	return this->score;
 }
