@@ -12,6 +12,7 @@
 #include"Player.h"
 #include"Point.h"
 #include"Console.h"
+#include"Helper.h"
 #include"constants.h"
 
 

@@ -1,5 +1,8 @@
 #include "Helper.h"
 
+#include <string.h>
+#include <cstdlib>
+
 
 int Helper::convertDigitsArrayIntoNumber(char digits[], int length) {
     int number = 0;
@@ -12,4 +15,11 @@ int Helper::convertDigitsArrayIntoNumber(char digits[], int length) {
     }
 
     return number;
+}
+
+char* Helper::convertNumberIntoDigitsArray(int number) {
+    char digits[100];
+    _itoa_s(number, digits, 10);
+    
+    return digits;
 }

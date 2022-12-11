@@ -115,7 +115,36 @@ int main() {
 		else if (console.getKeyCode() == SAVE_GAME_KEY_CHARACTER) {
 			char fileName[100] = "test.txt";
 			board.saveBoardToFile(fileName);
-			
+
+			/*if (menu.getShouldDisplayCustomBoardSizeSelectionModal()) {
+				menu.showCustomBoardSizeSelectionModal(console, cursor);
+
+				console.setKeyCode(NEW_GAME_KEY_CHARACTER);
+
+				char digits[100];
+				int digitIndex = 0;
+
+				do {
+					console.setKeyCode(getche());
+
+					digits[digitIndex] = (char)(console.getKeyCode());
+					digitIndex++;
+
+				} while (console.getKeyCode() != ENTER_KEY_CODE);
+
+				digitIndex--;
+
+				for (int i = 0; i < digitIndex; i++) {
+					putch(digits[i]);
+				}
+
+				int newSize = Helper::convertDigitsArrayIntoNumber(digits, digitIndex);
+				board = Board(newSize, true, board.getBlackPlayer(), board.getWhitePlayer());
+
+				menu.setShouldDisplayCustomBoardSizeSelectionModal(false);
+
+				continue;
+			}*/
 		}
 		else if (console.getKeyCode() == LOAD_GAME_KEY_CHARACTER) {
 			char fileName[100] = "test.txt";
