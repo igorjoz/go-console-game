@@ -117,6 +117,7 @@ bool Board::insertStone() {
 	}
 
 	this->board[rowIndex][columnIndex] = currentPlayerId;
+	int boardPosition = this->board[rowIndex][columnIndex];
 	
 	this->removeNeighbouringStonesWithNoLiberties(rowIndex, columnIndex);
 
@@ -135,6 +136,13 @@ bool Board::insertStone() {
 	/*if (this->isStoneSuicider(rowIndex, columnIndex, currentPlayerId)) {
 		return false;
 	}*/
+	//bool isSuicider = true;
+	//if (rowIndex - 1 >= 0) {
+	//	if (this->board[rowIndex - 1][columnIndex] != this->getOpponentPlayerId() {
+	//		isSuicider = false;
+	//		//return false;
+	//	}
+	//}
 
 	for (int i = 0; i < this->size; i++) {
 		for (int j = 0; j < this->size; j++) {
@@ -143,7 +151,10 @@ bool Board::insertStone() {
 	}
 
 	this->changePlayer();
-	//this->removeStonesWithNoLiberties();
+	this->removeStonesWithNoLiberties();
+
+	// captureChains
+	//this->captureChains();
 
 	return true;
 }
@@ -216,26 +227,18 @@ void Board::removeNeighbouringStonesWithNoLiberties(int rowIndex, int columnInde
 	short int opponentPlayerId = this->getOpponentPlayerId(currentPlayerId);
 
 	if (rowIndex - 1 >= 0 and !this->hasLiberty(rowIndex - 1, columnIndex, opponentPlayerId)) {
-		this->incrementBlackPlayerScore();
-		this->incrementWhitePlayerScore();
 		this->board[rowIndex - 1][columnIndex] = EMPTY_POSITION_ID;
 	}
 
 	if (rowIndex + 1 < this->size and !this->hasLiberty(rowIndex + 1, columnIndex, opponentPlayerId)) {
-		this->incrementBlackPlayerScore();
-		this->incrementWhitePlayerScore();
 		this->board[rowIndex + 1][columnIndex] = EMPTY_POSITION_ID;
 	}
 
 	if (columnIndex - 1 and !this->hasLiberty(rowIndex, columnIndex - 1, opponentPlayerId)) {
-		this->incrementBlackPlayerScore();
-		this->incrementWhitePlayerScore();
 		this->board[rowIndex][columnIndex - 1] = EMPTY_POSITION_ID;
 	}
 
 	if (columnIndex + 1 < this->size and !this->hasLiberty(rowIndex, columnIndex + 1, opponentPlayerId)) {
-		this->incrementBlackPlayerScore();
-		this->incrementWhitePlayerScore();
 		this->board[rowIndex][columnIndex + 1] = EMPTY_POSITION_ID;
 	}
 }
@@ -348,11 +351,6 @@ void Board::copyBoardIntoPreviousBoard() {
 }
 
 
-
-
-
-
-
 void Board::captureChain(int rowIndex, int columnIndex, int color)
 {
 	if (this->board[rowIndex][columnIndex] == color)
@@ -382,7 +380,6 @@ bool Board::isSurroundedBySameColorChain(int i, int j, int color)
 {
 	if (i > 0 && this->board[i - 1][j] == color)
 	{
-		// Check if the position above the given position is part of a chain of the given color
 		if (this->isPartOfSameColorChain(i - 1, j, color))
 		{
 			return true;
@@ -391,7 +388,6 @@ bool Board::isSurroundedBySameColorChain(int i, int j, int color)
 	
 	if (i < this->size - 1 && this->board[i + 1][j] == color)
 	{
-		// Check if the position below the given position is part of a chain of the given color
 		if (this->isPartOfSameColorChain(i + 1, j, color))
 		{
 			return true;
@@ -400,7 +396,6 @@ bool Board::isSurroundedBySameColorChain(int i, int j, int color)
 	
 	if (j > 0 && this->board[i][j - 1] == color)
 	{
-		// Check if the position to the left of the given position is part of a chain of the given color
 		if (this->isPartOfSameColorChain(i, j - 1, color))
 		{
 			return true;
@@ -415,7 +410,6 @@ bool Board::isSurroundedBySameColorChain(int i, int j, int color)
 		}
 	}
 
-	// If the given position is not surrounded by a chain of the given color, return false
 	return false;
 }
 
