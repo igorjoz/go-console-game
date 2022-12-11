@@ -48,6 +48,8 @@ public:
 	void captureChain(int rowIndex, int columnIndex, int color);
 	bool isSurroundedBySameColorChain(int rowIndex, int columnIndex, int color);
 	bool isPartOfSameColorChain(int rowIndex, int columnIndex, int color);
+
+	void copyBoardIntoPreviousBoard();
 	
 
 	// BoardPrintService

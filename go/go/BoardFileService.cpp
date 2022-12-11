@@ -108,26 +108,10 @@ void Board::loadBoardFromFile(char* fileName) {
 	whitePlayerScore = this->readAndConvertToNumber(buffer, &bufferIndex);
 	boardSize = this->readAndConvertToNumber(buffer, &bufferIndex);
 
-	// free previous board
-	/*for (int rowIndex = 0; rowIndex < this->size; rowIndex++) {
-		free(this->board[rowIndex]);
-		free(this->previousBoard[rowIndex]);
-	}*/
+	this->blackPlayer->setScore(blackPlayerScore);
+	this->whitePlayer->setScore(whitePlayerScore);
 
-	// free previous players
-	//free(this->blackPlayer);
-	//free(this->whitePlayer);
-	
-	// create new board
-	//this->size = boardSize;
-	
-	Player blackPlayer = Player(BLACK_PLAYER_ID, blackPlayerScore);
-	Player whitePlayer = Player(WHITE_PLAYER_ID, whitePlayerScore);
-
-	*this = Board(boardSize, true, &blackPlayer, &whitePlayer, currentPlayerId);
-
-	//	* this = Board(*this);
-	
+	*this = Board(boardSize, true, this->blackPlayer, this->whitePlayer, currentPlayerId);
 
 	for (int rowIndex = 0; rowIndex < this->size; rowIndex++) {
 		for (int columnIndex = 0; columnIndex < this->size; columnIndex++) {
