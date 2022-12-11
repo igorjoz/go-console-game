@@ -21,10 +21,34 @@ class Cursor;
 class Board
 {
 public:
-	Board(int size, bool isBoardSizeSelected, Player* player1, Player* player2);
+	Board(int size, bool isBoardSizeSelected, Player* blackPlayer, Player* whitePlayer);
 	Board(const Board& previousBoard);
 
 	void printBoard();
+
+	bool insertStone();
+	void removeStonesWithNoLiberties();
+	void changePlayer();
+	void incrementCurrentPlayerScore();
+	void incrementBlackPlayerScore();
+	void incrementWhitePlayerScore();
+	void restartGame(Console console, Cursor cursor);
+	
+	bool isPositionOccupied(int rowIndex, int columnIndex);
+	bool isStoneSuicider(int rowIndex, int columnIndex);
+	bool isKo();
+	bool areBoardsEqual();
+	
+	bool hasLiberty(int rowIndex, int columnIndex);
+	
+	int interpretBoardSizeSelection(Cursor cursor);
+
+	void captureChain(int rowIndex, int columnIndex, int color);
+	bool isSurroundedBySameColorChain(int rowIndex, int columnIndex, int color);
+	bool isPartOfSameColorChain(int rowIndex, int columnIndex, int color);
+	
+
+	// BoardPrintService
 	void printTopAndBottomBorder();
 	void printLeftAndRightBorder();
 	void printBoardStructure();
@@ -33,16 +57,19 @@ public:
 	void printBoardState();
 	void printIsInGameEditorMode();
 
+	
+	// BoardGetService
 	int getSize();
 	bool getIsInGameEditorMode();
 	bool getIsBoardSizeSelected();
 	Player* getCurrentPlayer();
 	int getCurrentPlayerId();
-	Player* getPlayer1();
-	Player* getPlayer2();
+	Player* getBlackPlayer();
+	Player* getWhitePlayer();
 	
-	int getBoardValueByCursorPosition(int cursorX, int cursorY);
-	int getBoardValue(int x, int y);
+	short unsigned int getBoardValueByCursorPosition(int cursorX, int cursorY);
+	short unsigned int getBoardValue(int rowIndex, int columnIndex);
+	short unsigned int getPreviousBoardValue(int rowIndex, int columnIndex);
 	int getRowIndex(int cursorY);
 	int getColumnIndex(int cursorX);
 
@@ -56,6 +83,7 @@ public:
 	int getRightBoardBorderX();
 
 	
+	// BoardSetService
 	void setSize(int size);
 	void setIsInGameEditorMode(bool isInEditorMode);
 	void setIsBoardSizeSelected(bool isBoardSizeSelected);
@@ -66,40 +94,24 @@ public:
 	void setRightBoardBorderX(int x);
 	
 	void setBoardValueByCursorPosition(int cursorX, int cursorY, short unsigned int value);
-	void setBoardValue(int x, int y, short unsigned int value);
-	
-
-	bool insertStone();
-	bool isPositionOccupied(int rowIndex, int columnIndex);
-	bool isStoneSuicider(int rowIndex, int columnIndex);
-	bool isKo();
-	void removeStonesWithNoLiberties();
-	bool hasLiberty(int rowIndex, int columnIndex);
-	void changePlayer();
-	void incrementCurrentPlayerScore();
-
-	void restartGame(Console console, Cursor cursor);
-	
-	int interpretBoardSizeSelection(Cursor cursor);
-	
-	void captureChain(int rowIndex, int columnIndex, int color);
-	bool isSurroundedBySameColorChain(int rowIndex, int columnIndex, int color);
-	bool isPartOfSameColorChain(int rowIndex, int columnIndex, int color);
+	void setBoardValue(int rowIndex, int columnIndex, short unsigned int value);
+	void setPreviousBoardValue(int rowIndex, int columnIndex, short unsigned int value);
 	
 
 private:
 	int size;
-	bool isInEditorMode;
+	bool isInGameEditorMode;
 	bool isBoardSizeSelected;
 	short unsigned int** board;
-	Player* player1;
-	Player* player2;
+	short unsigned int** previousBoard;
+	Player* blackPlayer;
+	Player* whitePlayer;
 	Player* currentPlayer;
 
-	int topBoardBorderY = VERTICAL_BOARD_PADDING + 1;
-	int bottomBoardBorderY = BOARD_SIZE + VERTICAL_BOARD_PADDING + 2;
-	int leftBoardBorderX = HORIZONTAL_BOARD_PADDING + 1;
-	int rightBoardBorderX = (BOARD_SIZE * 2) + HORIZONTAL_BOARD_PADDING + 3;
+	int topBoardBorderY;
+	int bottomBoardBorderY;
+	int leftBoardBorderX;
+	int rightBoardBorderX;
 };
 
 

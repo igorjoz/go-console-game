@@ -3,49 +3,66 @@
 #include"Cursor.h"
 
 
-Board::Board(int size, bool isBoardSizeSelected, Player* player1, Player* player2) {
+Board::Board(int size, bool isBoardSizeSelected, Player* blackPlayer, Player* whitePlayer) {
 	this->size = size;
-	this->isInEditorMode = false;
+	this->isInGameEditorMode = false;
 	this->isBoardSizeSelected = isBoardSizeSelected;
 
 	this->bottomBoardBorderY = size + VERTICAL_BOARD_PADDING + 2;
 	this->rightBoardBorderX = size * 2 + HORIZONTAL_BOARD_PADDING + 3;
 
+	this->topBoardBorderY = VERTICAL_BOARD_PADDING + 1;
+	this->leftBoardBorderX = HORIZONTAL_BOARD_PADDING + 1;
+
 	board = new short unsigned int* [this->size];
+	previousBoard = new short unsigned int* [this->size];
 
 	for (int i = 0; i < this->size; i++) {
 		board[i] = new short unsigned int[this->size];
+		previousBoard[i] = new short unsigned int[this->size];
 
 		for (int j = 0; j < this->size; j++) {
 			board[i][j] = 0;
+			previousBoard[i][j] = 0;
 		}
 	}
 
-	this->player1 = player1;
-	this->player2 = player2;
-	this->currentPlayer = player1;
+	this->blackPlayer = blackPlayer;
+	this->whitePlayer = whitePlayer;
+	this->currentPlayer = blackPlayer;
 }
 
 
-// copy constructor
-Board::Board(const Board& previousBoard) :
+Board::Board(const Board& previousBoard) : // copy constructor
 	size(previousBoard.size),
-	player1(previousBoard.player1),
-	player2(previousBoard.player2) {
+	blackPlayer(previousBoard.blackPlayer),
+	whitePlayer(previousBoard.whitePlayer) {
 
-	this->isInEditorMode = false;
+	this->isInGameEditorMode = false;
 	this->isBoardSizeSelected = false;
-	this->currentPlayer = this->player1;
 
+	this->bottomBoardBorderY = size + VERTICAL_BOARD_PADDING + 2;
+	this->rightBoardBorderX = size * 2 + HORIZONTAL_BOARD_PADDING + 3;
+
+	this->topBoardBorderY = VERTICAL_BOARD_PADDING + 1;
+	this->leftBoardBorderX = HORIZONTAL_BOARD_PADDING + 1;
+	
 	board = new short unsigned int* [this->size];
+	this->previousBoard = new short unsigned int* [this->size];
 
 	for (int i = 0; i < this->size; i++) {
 		board[i] = new short unsigned int[this->size];
+		this->previousBoard[i] = new short unsigned int[this->size];
 
 		for (int j = 0; j < this->size; j++) {
 			board[i][j] = 0;
+			this->previousBoard[i][j] = 0;
 		}
 	}
+	
+	this->blackPlayer = blackPlayer;
+	this->whitePlayer = whitePlayer;
+	this->currentPlayer = blackPlayer;
 }
 
 
@@ -64,25 +81,32 @@ void Board::printBoard() {
 
 bool Board::insertStone() {
 	int currentPlayerId = this->getCurrentPlayerId();
+	
 	int cursorX = wherex();
 	int cursorY = wherey();
+	
+	int rowIndex = this->getRowIndex(cursorY);
+	int columnIndex = this->getColumnIndex(cursorX);
 
 	// if in game editor mode, black player can insert any number of stones before start of the game
-	if (this->getIsInGameEditorMode()) {
-		this->setBoardValueByCursorPosition(cursorX, cursorY, BLACK_PLAYER_ID);
+	if (this->isInGameEditorMode) {
+		this->board[rowIndex][columnIndex] = BLACK_PLAYER_ID;
 
 		return true;
 	}
 
-	if (this->isPositionOccupied(cursorX, cursorY)) {
-		//if (this->isPositionOccupied(cursorX, cursorY) or this->isStoneSuicider(cursorX, cursorY)) {
+	if (this->isPositionOccupied(rowIndex, columnIndex) or this->isStoneSuicider(rowIndex, columnIndex)) {
 		return false;
 	}
 
-	this->setBoardValueByCursorPosition(cursorX, cursorY, currentPlayerId);
+	this->board[rowIndex][columnIndex] = currentPlayerId;
 
-	//this->isKo();
-
+	if (this->isKo()) {
+		this->board[rowIndex][columnIndex] = EMPTY_POSITION_ID;
+		
+		return false;
+	}
+	
 	this->changePlayer();
 	this->removeStonesWithNoLiberties();
 
@@ -91,9 +115,9 @@ bool Board::insertStone() {
 
 
 bool Board::isPositionOccupied(int rowIndex, int columnIndex) {
-	int boardValue = this->getBoardValueByCursorPosition(rowIndex, columnIndex);
+	int boardValue = this->board[rowIndex][columnIndex];
 
-	if (boardValue != 0) {
+	if (boardValue != EMPTY_POSITION_ID) {
 		return true;
 	}
 
@@ -111,7 +135,24 @@ bool Board::isStoneSuicider(int rowIndex, int columnIndex) {
 
 
 bool Board::isKo() {
+	if (this->areBoardsEqual()) {
+		return true;
+	}
+	
 	return false;
+}
+
+
+bool Board::areBoardsEqual() {
+	for (int rowIndex = 0; rowIndex < this->size; rowIndex++) {
+		for (int columnIndex = 0; columnIndex < this->size; columnIndex++) {
+			if (this->getBoardValue(rowIndex, columnIndex) != this->getPreviousBoardValue(rowIndex, columnIndex)) {
+				return false;
+			}
+		}
+	}
+
+	return true;
 }
 
 
@@ -119,7 +160,16 @@ void Board::removeStonesWithNoLiberties() {
 	for (int rowIndex = 0; rowIndex < this->size; rowIndex++) {
 		for (int columnIndex = 0; columnIndex < this->size; columnIndex++) {
 			if (!this->hasLiberty(rowIndex, columnIndex)) {
-				this->setBoardValue(rowIndex, columnIndex, 0);
+				short unsigned int boardValue = this->board[rowIndex][columnIndex];
+
+				if (boardValue == BLACK_PLAYER_ID) {
+					this->incrementBlackPlayerScore();
+				}
+				else if (boardValue == WHITE_PLAYER_ID) {
+					this->incrementWhitePlayerScore();
+				}
+				
+				this->board[rowIndex][columnIndex] = EMPTY_POSITION_ID;
 				this->incrementCurrentPlayerScore();
 			}
 		}
@@ -175,12 +225,6 @@ bool Board::hasLiberty(int rowIndex, int columnIndex) {
 
 
 void Board::restartGame(Console console, Cursor cursor) {
-	//cursor.setX(INITIAL_CURSOR_X_POSITION);
-	//cursor.setY(INITIAL_CURSOR_Y_POSITION);
-
-	//gotoxy(INITIAL_CURSOR_X_POSITION, INITIAL_CURSOR_Y_POSITION);
-	//putch('@');
-
 	*this = Board(*this);
 }
 
@@ -188,17 +232,28 @@ void Board::restartGame(Console console, Cursor cursor) {
 void Board::changePlayer() {
 	int currentPlayerId = this->getCurrentPlayerId();
 
-	if (currentPlayerId == WHITE_PLAYER_ID) {
-		this->currentPlayer = this->player2;
+
+	if (currentPlayerId == BLACK_PLAYER_ID) {
+		this->currentPlayer = this->whitePlayer;
 	}
-	else if (currentPlayerId == BLACK_PLAYER_ID) {
-		this->currentPlayer = this->player1;
+	else {
+		this->currentPlayer = this->blackPlayer;
 	}
 }
 
 
 void Board::incrementCurrentPlayerScore() {
 	this->currentPlayer->incrementScore();
+}
+
+
+void Board::incrementBlackPlayerScore() {
+	this->blackPlayer->incrementScore();
+}
+
+
+void Board::incrementWhitePlayerScore() {
+	this->whitePlayer->incrementScore();
 }
 
 

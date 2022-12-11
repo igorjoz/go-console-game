@@ -11,10 +11,10 @@
 
 
 int main() {
-	Player player1(WHITE_PLAYER_ID);
-	Player player2(BLACK_PLAYER_ID);
+	Player blackPlayer(BLACK_PLAYER_ID);
+	Player whitePlayer(WHITE_PLAYER_ID);
 
-	Board board(BOARD_SIZE, false, &player1, &player2);
+	Board board(BOARD_SIZE, false, &blackPlayer, &whitePlayer);
 	Menu menu;
 	Cursor cursor;
 	Console console;
@@ -52,7 +52,7 @@ int main() {
 					continue;
 				}
 
-				board = Board(newSize, true, board.getPlayer1(), board.getPlayer2());
+				board = Board(newSize, true, board.getBlackPlayer(), board.getWhitePlayer());
 			}
 
 			continue;

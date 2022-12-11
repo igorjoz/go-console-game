@@ -99,12 +99,12 @@ void Board::printBoardState() {
 
 			gotoxy(columnIndex, rowIndex);
 
-			if (boardValue == 1) {
-				textcolor(LIGHTGRAY);
+			if (boardValue == BLACK_PLAYER_ID) {
+				textcolor(LIGHTBLUE);
 				putch('O');
 			}
-			else if (boardValue == 2) {
-				textcolor(LIGHTBLUE);
+			else if (boardValue == WHITE_PLAYER_ID) {
+				textcolor(LIGHTGRAY);
 				putch('O');
 			}
 

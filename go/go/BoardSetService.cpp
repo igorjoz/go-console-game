@@ -29,8 +29,8 @@ void Board::setSize(int size) {
 }
 
 
-void Board::setIsInGameEditorMode(bool isInEditorMode) {
-	this->isInEditorMode = isInEditorMode;
+void Board::setIsInGameEditorMode(bool isInGameEditorMode) {
+	this->isInGameEditorMode = isInGameEditorMode;
 }
 
 
@@ -46,6 +46,11 @@ void Board::setBoardValueByCursorPosition(int cursorX, int cursorY, short unsign
 
 void Board::setBoardValue(int rowIndex, int columnIndex, short unsigned int value) {
 	this->board[rowIndex][columnIndex] = value;
+}
+
+
+void Board::setPreviousBoardValue(int rowIndex, int columnIndex, short unsigned int value) {
+	this->previousBoard[rowIndex][columnIndex] = value;
 }
 
 

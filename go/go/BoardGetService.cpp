@@ -8,7 +8,7 @@ int Board::getSize() {
 
 
 bool Board::getIsInGameEditorMode() {
-	return this->isInEditorMode;
+	return this->isInGameEditorMode;
 }
 
 
@@ -27,23 +27,28 @@ int Board::getCurrentPlayerId() {
 }
 
 
-Player* Board::getPlayer1() {
-	return this->player1;
+Player* Board::getBlackPlayer() {
+	return this->blackPlayer;
 }
 
 
-Player* Board::getPlayer2() {
-	return this->player2;
+Player* Board::getWhitePlayer() {
+	return this->whitePlayer;
 }
 
 
-int Board::getBoardValueByCursorPosition(int cursorX, int cursorY) {
+unsigned short int Board::getBoardValueByCursorPosition(int cursorX, int cursorY) {
 	return this->board[this->getRowIndex(cursorY)][this->getColumnIndex(cursorX)];
 }
 
 
-int Board::getBoardValue(int rowIndex, int columnIndex) {
+unsigned short int Board::getBoardValue(int rowIndex, int columnIndex) {
 	return this->board[rowIndex][columnIndex];
+}
+
+
+unsigned short int Board::getPreviousBoardValue(int rowIndex, int columnIndex) {
+	return this->previousBoard[rowIndex][columnIndex];
 }
 
 
@@ -93,21 +98,22 @@ char* Board::getCurrentPlayerText() {
 
 
 char* Board::getPlayersScoreText() {
-	int whitePlayerScore = this->player1->getScore();
-	int blackPlayerScore = this->player2->getScore();
+	int blackPlayerScore = this->blackPlayer->getScore();
+	int whitePlayerScore = this->whitePlayer->getScore();
 
 	char* playersScoreText = new char[32];
-	char whitePlayerScoreText[32];
 	char blackPlayerScoreText[32];
+	char whitePlayerScoreText[32];
 
-	_itoa_s(whitePlayerScore, whitePlayerScoreText, 10);
 	_itoa_s(blackPlayerScore, blackPlayerScoreText, 10);
+	_itoa_s(whitePlayerScore, whitePlayerScoreText, 10);
 
-	strcpy_s(playersScoreText, 32, "white: ");
+	strcpy_s(playersScoreText, 32, ", black: ");
+	strcat_s(playersScoreText, 32, blackPlayerScoreText);
+	
+	strcat_s(playersScoreText, 32, "white: ");
 	strcat_s(playersScoreText, 32, whitePlayerScoreText);
 
-	strcat_s(playersScoreText, 32, ", black: ");
-	strcat_s(playersScoreText, 32, blackPlayerScoreText);
 
 	return playersScoreText;
 }

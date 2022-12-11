@@ -43,8 +43,9 @@ unsigned char const TOP_RIGHT_LINE_CORNER_CODE = 191;
 unsigned char const BOTTOM_RIGHT_LINE_CORNER_CODE = 217;
 unsigned char const BOTTOM_LEFT_LINE_CORNER_CODE = 192;
 
-unsigned short int const WHITE_PLAYER_ID = 1;
-unsigned short int const BLACK_PLAYER_ID = 2;
+unsigned short int const EMPTY_POSITION_ID = 0;
+unsigned short int const BLACK_PLAYER_ID = 1;
+unsigned short int const WHITE_PLAYER_ID = 2;
 
 // menu
 int const MENU_DISTANCE = 48;
