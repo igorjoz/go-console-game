@@ -29,6 +29,7 @@ public:
 	bool getShouldResetPosition();
 	void setShouldResetPosition(bool shouldResetPosition);
 	void resetToInitialPosition();
+	void resetToModalInitialPosition();
 
 private:
 	int x;

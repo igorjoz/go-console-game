@@ -12,26 +12,24 @@
 
 
 int main() {
-	Player blackPlayer(BLACK_PLAYER_ID);
-	Player whitePlayer(WHITE_PLAYER_ID);
+	Player blackPlayer(BLACK_PLAYER_ID, 0);
+	Player whitePlayer(WHITE_PLAYER_ID, 0);
 
-	Board board(BOARD_SIZE, false, &blackPlayer, &whitePlayer);
+	Board board(BOARD_SIZE, false, &blackPlayer, &whitePlayer, BLACK_PLAYER_ID);
 	Menu menu;
 	Cursor cursor;
 	Console console;
 
 	Console::setInitialProgramSettings();
 
-	cursor.resetToInitialPosition();
-
 	do {
-		if (cursor.getShouldResetPosition()) {
-			cursor.resetToInitialPosition();
-		}
-
 		console.refreshSettings();
 
 		if (!board.getIsBoardSizeSelected()) {
+			if (cursor.getShouldResetPosition()) {
+				cursor.resetToModalInitialPosition();
+			}
+			
 			menu.showBoardSizeSelectionModal(console, cursor);
 
 			console.setIsZeroFirstKeyCode(false);
@@ -53,17 +51,19 @@ int main() {
 					continue;
 				}
 
-				board = Board(newSize, true, board.getBlackPlayer(), board.getWhitePlayer());
+				board = Board(newSize, true, board.getBlackPlayer(), board.getWhitePlayer(), BLACK_PLAYER_ID);
 			}
 
 			continue;
 		}
 
 		if (menu.getShouldDisplayCustomBoardSizeSelectionModal()) {
+			if (cursor.getShouldResetPosition()) {
+				cursor.resetToModalInitialPosition();
+			}
+			
 			menu.showCustomBoardSizeSelectionModal(console, cursor);
 
-			console.setKeyCode(NEW_GAME_KEY_CHARACTER);
-			
 			char digits[100];
 			int digitIndex = 0;
 
@@ -77,16 +77,16 @@ int main() {
 
 			digitIndex--;
 
-			for (int i = 0; i < digitIndex; i++) {
-				putch(digits[i]);
-			}
-
 			int newSize = Helper::convertDigitsArrayIntoNumber(digits, digitIndex);
-			board = Board(newSize, true, board.getBlackPlayer(), board.getWhitePlayer());
+			board = Board(newSize, true, board.getBlackPlayer(), board.getWhitePlayer(), BLACK_PLAYER_ID);
 			
 			menu.setShouldDisplayCustomBoardSizeSelectionModal(false);
 
 			continue;
+		}
+
+		if (cursor.getShouldResetPosition()) {
+			cursor.resetToInitialPosition();
 		}
 
 		board.printBoard();
@@ -113,38 +113,32 @@ int main() {
 			board.setIsInGameEditorMode(newState);
 		}
 		else if (console.getKeyCode() == SAVE_GAME_KEY_CHARACTER) {
-			char fileName[100] = "test.txt";
-			board.saveBoardToFile(fileName);
+			//char fileName[100] = "test.txt";
+			//board.saveBoardToFile(fileName);
 
-			/*if (menu.getShouldDisplayCustomBoardSizeSelectionModal()) {
-				menu.showCustomBoardSizeSelectionModal(console, cursor);
+			if (menu.getShouldDisplayFileNameInput()) {
+				menu.showFileNameInputModal(console, cursor);
 
-				console.setKeyCode(NEW_GAME_KEY_CHARACTER);
-
-				char digits[100];
-				int digitIndex = 0;
+				char characters[100] = {};
+				int characterIndex = 0;
 
 				do {
 					console.setKeyCode(getche());
 
-					digits[digitIndex] = (char)(console.getKeyCode());
-					digitIndex++;
-
+						characters[characterIndex] = (char)(console.getKeyCode());
+						characterIndex++;
 				} while (console.getKeyCode() != ENTER_KEY_CODE);
 
-				digitIndex--;
+				characterIndex--;
 
-				for (int i = 0; i < digitIndex; i++) {
-					putch(digits[i]);
-				}
+				characters[characterIndex] = '\0';
+				
+				board.saveBoardToFile(characters);
 
-				int newSize = Helper::convertDigitsArrayIntoNumber(digits, digitIndex);
-				board = Board(newSize, true, board.getBlackPlayer(), board.getWhitePlayer());
-
-				menu.setShouldDisplayCustomBoardSizeSelectionModal(false);
+				//menu.setShouldDisplayFileNameInput(false);
 
 				continue;
-			}*/
+			}
 		}
 		else if (console.getKeyCode() == LOAD_GAME_KEY_CHARACTER) {
 			char fileName[100] = "test.txt";

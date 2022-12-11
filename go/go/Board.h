@@ -22,7 +22,7 @@ class Cursor;
 class Board
 {
 public:
-	Board(int size, bool isBoardSizeSelected, Player* blackPlayer, Player* whitePlayer);
+	Board(int size, bool isBoardSizeSelected, Player* blackPlayer, Player* whitePlayer, int currentPlayer);
 	Board(const Board& previousBoard);
 
 	void printBoard();
@@ -102,6 +102,8 @@ public:
 
 	
 	// BoardFileService
+	void static convertNumberAndWriteToBuffer(int number, char* buffer, int* bufferIndex);
+	int readAndConvertToNumber(char* buffer, int* bufferIndex);
 	void saveBoardToFile(char* fileName);
 	void loadBoardFromFile(char* fileName);
 	

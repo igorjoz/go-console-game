@@ -125,6 +125,15 @@ void Menu::showCustomBoardSizeSelectionModal(Console console, Cursor cursor) {
 }
 
 
+void Menu::showFileNameInputModal(Console console, Cursor cursor) {
+	gotoxy(BOARD_SIZE_SELECTION_MODAL_DISTANCE, 2);
+	cputs("Click ENTER to confirm");
+
+	gotoxy(BOARD_SIZE_SELECTION_MODAL_DISTANCE, 4);
+	cputs("File name (with .txt extension): ");
+}
+
+
 int Menu::incrementMenuRow() {
 	return this->menuRowY++;
 }
@@ -134,10 +143,22 @@ void Menu::restartMenuRow() {
 	this->menuRowY = TOP_BOARD_BORDER_Y + 1;
 }
 
+
 bool Menu::getShouldDisplayCustomBoardSizeSelectionModal() {
 	return this->shouldDisplayCustomBoardSizeSelectionModal;
 }
 
+
 void Menu::setShouldDisplayCustomBoardSizeSelectionModal(bool shouldDisplayCustomBoardSizeSelectionModal) {
 	this->shouldDisplayCustomBoardSizeSelectionModal = shouldDisplayCustomBoardSizeSelectionModal;
+}
+
+
+bool Menu::getShouldDisplayFileNameInput() {
+	return this->shouldDisplayFileNameInput;
+}
+
+
+void Menu::setShouldDisplayFileNameInput(bool shouldDisplayFileNameInput) {
+	this->shouldDisplayFileNameInput = shouldDisplayFileNameInput;
 }

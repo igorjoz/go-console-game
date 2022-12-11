@@ -2,9 +2,9 @@
 
 
 Cursor::Cursor() {
-	this->x = INITIAL_CURSOR_X_POSITION;
+	this->x = INITIAL_CURSOR_MODAL_POSITION;
 	this->y = INITIAL_CURSOR_Y_POSITION;
-	this->shouldResetPosition = false;
+	this->shouldResetPosition = true;
 }
 
 
@@ -82,6 +82,14 @@ void Cursor::setShouldResetPosition(bool shouldResetPosition) {
 
 void Cursor::resetToInitialPosition() {
 	this->x = INITIAL_CURSOR_X_POSITION;
+	this->y = INITIAL_CURSOR_Y_POSITION;
+
+	this->shouldResetPosition = false;
+}
+
+
+void Cursor::resetToModalInitialPosition() {
+	this->x = INITIAL_CURSOR_MODAL_POSITION;
 	this->y = INITIAL_CURSOR_Y_POSITION;
 
 	this->shouldResetPosition = false;

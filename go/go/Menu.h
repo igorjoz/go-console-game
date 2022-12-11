@@ -28,9 +28,14 @@ public:
 	bool getShouldDisplayCustomBoardSizeSelectionModal();
 	void setShouldDisplayCustomBoardSizeSelectionModal(bool shouldDisplayCustomBoardSizeSelectionModal);
 
+	void showFileNameInputModal(Console console, Cursor cursor);
+	bool getShouldDisplayFileNameInput();
+	void setShouldDisplayFileNameInput(bool shouldDisplayFileNameInput);
+
 private:
 	int menuRowY;
 	bool shouldDisplayCustomBoardSizeSelectionModal;
+	bool shouldDisplayFileNameInput;
 };
 
 

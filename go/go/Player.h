@@ -8,10 +8,11 @@
 class Player
 {
 public:
-	Player(int id);
+	Player(int id, int score);
 
 	int getId();
 	int getScore();
+	void setScore(int score);
 	int incrementScore();
 
 private:

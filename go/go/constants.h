@@ -9,7 +9,8 @@
 int const BOARD_SIZE = 9;
 
 int const VERTICAL_BOARD_PADDING = 2;
-int const HORIZONTAL_BOARD_PADDING = 2 * 2;
+int const HORIZONTAL_BOARD_PADDING = 22 * 2;
+//int const HORIZONTAL_BOARD_PADDING = 2 * 2;
 
 int constexpr TOP_BOARD_BORDER_Y = VERTICAL_BOARD_PADDING + 1;
 int constexpr BOTTOM_BOARD_BORDER_Y = BOARD_SIZE + VERTICAL_BOARD_PADDING + 2;
@@ -48,8 +49,11 @@ unsigned short int const BLACK_PLAYER_ID = 1;
 unsigned short int const WHITE_PLAYER_ID = 2;
 
 // menu
-int const MENU_DISTANCE = 48;
-int const BOARD_SIZE_SELECTION_MODAL_DISTANCE = 8;
+//int const MENU_DISTANCE = 48;
+int const MENU_DISTANCE = 4;
+int const BOARD_SIZE_SELECTION_MODAL_DISTANCE = 4;
+//int const BOARD_SIZE_SELECTION_MODAL_DISTANCE = LEFT_BOARD_BORDER_X + 2;
+int const INITIAL_CURSOR_MODAL_POSITION = MENU_DISTANCE - 1;
 
 // cursor
 int const LEFT_ARROW_KEY_CODE = 0x4b;

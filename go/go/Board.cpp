@@ -3,7 +3,7 @@
 #include"Cursor.h"
 
 
-Board::Board(int size, bool isBoardSizeSelected, Player* blackPlayer, Player* whitePlayer) {
+Board::Board(int size, bool isBoardSizeSelected, Player* blackPlayer, Player* whitePlayer, int currentPlayerId) {
 	this->size = size;
 	this->isInGameEditorMode = false;
 	this->isBoardSizeSelected = isBoardSizeSelected;
@@ -29,7 +29,13 @@ Board::Board(int size, bool isBoardSizeSelected, Player* blackPlayer, Player* wh
 
 	this->blackPlayer = blackPlayer;
 	this->whitePlayer = whitePlayer;
-	this->currentPlayer = blackPlayer;
+
+	if (currentPlayerId == BLACK_PLAYER_ID) {
+		this->currentPlayer = this->blackPlayer;
+	}
+	else {
+		this->currentPlayer = this->whitePlayer;
+	}
 }
 
 

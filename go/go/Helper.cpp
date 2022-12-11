@@ -7,8 +7,7 @@
 int Helper::convertDigitsArrayIntoNumber(char digits[], int length) {
     int number = 0;
 
-    for (int i = 0; i < length; i++)
-    {
+    for (int i = 0; i < length; i++) {
         int digit = digits[i] - '0';
 
         number = number * 10 + digit;
@@ -16,6 +15,7 @@ int Helper::convertDigitsArrayIntoNumber(char digits[], int length) {
 
     return number;
 }
+
 
 char* Helper::convertNumberIntoDigitsArray(int number) {
     char digits[100];
