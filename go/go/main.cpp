@@ -1,13 +1,13 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-#include<stdio.h>
-#include"conio2.h"
+#include <stdio.h>
+#include "conio2.h"
 
-#include"Board.h"
-#include"Console.h"
-#include"Cursor.h"
-#include"Menu.h"
-#include"Player.h"
+#include "Board.h"
+#include "Console.h"
+#include "Cursor.h"
+#include "Menu.h"
+#include "Player.h"
 
 
 int main() {
@@ -67,7 +67,7 @@ int main() {
 			char* digits[100];
 			int digitIndex = 0;
 
-			while (true) {
+			/*while (true) {
 				console.setKeyCode(getch());
 				digits[digitIndex++] = (((char)console.getKeyCode()))[0];
 
@@ -75,7 +75,7 @@ int main() {
 					menu.setShouldDisplayCustomBoardSizeSelectionModal(false);
 					break;
 				}
-			}
+			}*/
 			
 			char digit = getche();
 			putch(digit);

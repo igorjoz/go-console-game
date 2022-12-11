@@ -1,5 +1,10 @@
 #pragma once
 
+
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
+
 // board
 int const BOARD_SIZE = 9;
 
@@ -59,3 +64,6 @@ int const INITIAL_CURSOR_Y_POSITION = TOP_BOARD_BORDER_Y + 1;
 // console
 char const AUTHOR_NAME_SURNAME_INDEX[30] = "Igor Jozefowicz, 193257";
 int const KEY_CODE_ROW = 20;
+
+
+#endif

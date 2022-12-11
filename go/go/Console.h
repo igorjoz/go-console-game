@@ -1,5 +1,10 @@
 #pragma once
 
+
+#ifndef CONSOLE_H
+#define CONSOLE_H
+
+
 #include "conio2.h"
 #include<stdio.h>
 
@@ -31,3 +36,6 @@ private:
 	int keyCode;
 	char keyCodeText[32];
 };
+
+
+#endif

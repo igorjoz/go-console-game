@@ -1,14 +1,15 @@
 #pragma once
 
+
 #ifndef CURSOR_h
 #define CURSOR_h
+
 
 #include <cstdlib>
 #include <string.h>
 
 #include "conio2.h"
 #include "constants.h"
-//#include "Board.h"
 
 
 class Cursor;
@@ -34,5 +35,6 @@ private:
 	int y;
 	bool shouldResetPosition;
 };
+
 
 #endif

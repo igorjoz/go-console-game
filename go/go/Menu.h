@@ -1,11 +1,16 @@
 #pragma once
 
+
+#ifndef MENU_H
+#define MENU_H
+
+
 #include "conio2.h"
 
 #include "Console.h"
 #include "Cursor.h"
-#include"Board.h";
-#include"Player.h"
+#include "Board.h";
+#include "Player.h"
 
 
 class Menu
@@ -28,3 +33,5 @@ private:
 	bool shouldDisplayCustomBoardSizeSelectionModal;
 };
 
+
+#endif

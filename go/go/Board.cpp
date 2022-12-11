@@ -1,6 +1,5 @@
 #include "Board.h"
 
-
 #include"Cursor.h"
 
 
@@ -63,127 +62,56 @@ void Board::printBoard() {
 }
 
 
-int Board::getBoardValueByCursorPosition(int cursorX, int cursorY) {
-	return this->board[this->getRowIndex(cursorY)][this->getColumnIndex(cursorX)];
-}
-
-
-void Board::setBoardValueByCursorPosition(int cursorX, int cursorY, short unsigned int value) {
-	this->board[this->getRowIndex(cursorY)][this->getColumnIndex(cursorX)] = value;
-}
-
-
-int Board::getBoardValue(int rowIndex, int columnIndex) {
-	return this->board[rowIndex][columnIndex];
-}
-
-void Board::setBoardValue(int rowIndex, int columnIndex, short unsigned int value) {
-	this->board[rowIndex][columnIndex] = value;
-}
-
-
-char* Board::getBoardPositionText(int cursorX, int cursorY) {
-	char boardRow[32], boardColumn[32];
-	int rowIndex = this->getRowIndex(cursorY);
-	int columnIndex = this->getColumnIndex(cursorX);
-
-	_itoa_s(rowIndex, boardRow, 10);
-	_itoa_s(columnIndex, boardColumn, 10);
-
-	char* boardPositionText = new char[32];
-	strcpy_s(boardPositionText, 32, "row: ");
-	strcat_s(boardPositionText, 32, boardRow);
-	strcat_s(boardPositionText, 32, ", column: ");
-	strcat_s(boardPositionText, 32, boardColumn);
-
-	return boardPositionText;
-}
-
-
-char* Board::getCurrentPlayerText() {
+bool Board::insertStone() {
 	int currentPlayerId = this->getCurrentPlayerId();
-	char* currentPlayerText = new char[32];
-
-	strcpy_s(currentPlayerText, 32, "current player: ");
-
-	if (currentPlayerId == WHITE_PLAYER_ID) {
-		strcat_s(currentPlayerText, 32, "white");
-	}
-	else if (currentPlayerId == BLACK_PLAYER_ID) {
-		strcat_s(currentPlayerText, 32, "black");
-	}
-
-	return currentPlayerText;
-}
-
-
-char* Board::getPlayersScoreText() {
-	int whitePlayerScore = this->player1->getScore();
-	int blackPlayerScore = this->player2->getScore();
-
-	char* playersScoreText = new char[32];
-	char whitePlayerScoreText[32];
-	char blackPlayerScoreText[32];
-
-	_itoa_s(whitePlayerScore, whitePlayerScoreText, 10);
-	_itoa_s(blackPlayerScore, blackPlayerScoreText, 10);
-
-	strcpy_s(playersScoreText, 32, "white: ");
-	strcat_s(playersScoreText, 32, whitePlayerScoreText);
-
-	strcat_s(playersScoreText, 32, ", black: ");
-	strcat_s(playersScoreText, 32, blackPlayerScoreText);
-
-	return playersScoreText;
-}
-
-
-int Board::getRowIndex(int cursorY) {
-	return (cursorY - TOP_BOARD_BORDER_Y - 1);
-}
-
-
-int Board::getColumnIndex(int cursorX) {
-	return (cursorX - LEFT_BOARD_BORDER_X - 2) / 2;
-}
-
-
-void Board::insertStone() {
 	int cursorX = wherex();
 	int cursorY = wherey();
 
+	// if in game editor mode, black player can insert any number of stones before start of the game
 	if (this->getIsInGameEditorMode()) {
 		this->setBoardValueByCursorPosition(cursorX, cursorY, BLACK_PLAYER_ID);
 
-		return;
+		return true;
 	}
 
-	int currentPlayerId = this->getCurrentPlayerId();
-
-	if (!this->canInsertStone(cursorX, cursorY)) {
-		return;
+	if (this->isPositionOccupied(cursorX, cursorY)) {
+		//if (this->isPositionOccupied(cursorX, cursorY) or this->isStoneSuicider(cursorX, cursorY)) {
+		return false;
 	}
 
-	if (currentPlayerId == WHITE_PLAYER_ID) {
-		this->setBoardValueByCursorPosition(cursorX, cursorY, WHITE_PLAYER_ID);
-	}
-	else {
-		this->setBoardValueByCursorPosition(cursorX, cursorY, BLACK_PLAYER_ID);
-	}
+	this->setBoardValueByCursorPosition(cursorX, cursorY, currentPlayerId);
+
+	//this->isKo();
 
 	this->changePlayer();
 	this->removeStonesWithNoLiberties();
+
+	return true;
 }
 
 
-bool Board::canInsertStone(int x, int y) {
-	int boardValue = this->getBoardValueByCursorPosition(x, y);
+bool Board::isPositionOccupied(int rowIndex, int columnIndex) {
+	int boardValue = this->getBoardValueByCursorPosition(rowIndex, columnIndex);
 
 	if (boardValue != 0) {
+		return true;
+	}
+
+	return false;
+}
+
+
+bool Board::isStoneSuicider(int rowIndex, int columnIndex) {
+	if (this->hasLiberty(rowIndex, columnIndex)) {
 		return false;
 	}
 
 	return true;
+}
+
+
+bool Board::isKo() {
+	return false;
 }
 
 
@@ -257,26 +185,6 @@ void Board::restartGame(Console console, Cursor cursor) {
 }
 
 
-bool Board::getIsInGameEditorMode() {
-	return this->isInEditorMode;
-}
-
-
-void Board::setIsInGameEditorMode(bool isInEditorMode) {
-	this->isInEditorMode = isInEditorMode;
-}
-
-
-bool Board::getIsBoardSizeSelected() {
-	return this->isBoardSizeSelected;
-}
-
-
-void Board::setIsBoardSizeSelected(bool isBoardSizeSelected) {
-	this->isBoardSizeSelected = isBoardSizeSelected;
-}
-
-
 void Board::changePlayer() {
 	int currentPlayerId = this->getCurrentPlayerId();
 
@@ -291,26 +199,6 @@ void Board::changePlayer() {
 
 void Board::incrementCurrentPlayerScore() {
 	this->currentPlayer->incrementScore();
-}
-
-
-Player* Board::getCurrentPlayer() {
-	return this->currentPlayer;
-}
-
-
-int Board::getCurrentPlayerId() {
-	return this->currentPlayer->getId();
-}
-
-
-Player* Board::getPlayer1() {
-	return this->player1;
-}
-
-
-Player* Board::getPlayer2() {
-	return this->player2;
 }
 
 
@@ -331,66 +219,94 @@ int Board::interpretBoardSizeSelection(Cursor cursor) {
 }
 
 
-int Board::getSize() {
-	return this->size;
+void Board::captureChain(int rowIndex, int columnIndex, int color)
+{
+	if (this->board[rowIndex][columnIndex] == color)
+	{
+		this->board[rowIndex][columnIndex] = 0;
+
+		if (rowIndex - 1 >= 0) {
+			captureChain(rowIndex - 1, columnIndex, color);
+		}
+		
+		if (rowIndex < this->getSize() - 1) {
+			captureChain(rowIndex + 1, columnIndex, color);
+		}
+		
+		if (columnIndex - 1 >= 0) {
+			captureChain(rowIndex, columnIndex - 1, color);
+		}
+		
+		if (columnIndex + 1 < this->getSize()) {
+			captureChain(rowIndex, columnIndex + 1, color);
+		}
+	}
 }
 
 
-void Board::setSize(int size) {
-	this->size = size;
-
-	/*if (this->board != NULL) {
-		for (int i = 0; i < this->size; i++) {
-			delete[] this->board[i];
-		}
-
-		delete[] this->board;
-	}*/
-
-	//this = ;
-	
-	this->board = new short unsigned int* [this->size];
-
-	for (int i = 0; i < this->size; i++) {
-		this->board[i] = new short unsigned int[this->size];
-
-		for (int j = 0; j < this->size; j++) {
-			this->board[i][j] = 0;
+bool Board::isSurroundedBySameColorChain(int i, int j, int color)
+{
+	if (i > 0 && this->board[i - 1][j] == color)
+	{
+		// Check if the position above the given position is part of a chain of the given color
+		if (this->isPartOfSameColorChain(i - 1, j, color))
+		{
+			return true;
 		}
 	}
 	
-	//this->setIsBoardSizeSelected(true);
+	if (i < this->size - 1 && this->board[i + 1][j] == color)
+	{
+		// Check if the position below the given position is part of a chain of the given color
+		if (this->isPartOfSameColorChain(i + 1, j, color))
+		{
+			return true;
+		}
+	}
+	
+	if (j > 0 && this->board[i][j - 1] == color)
+	{
+		// Check if the position to the left of the given position is part of a chain of the given color
+		if (this->isPartOfSameColorChain(i, j - 1, color))
+		{
+			return true;
+		}
+	}
+	
+	if (j < this->size - 1 && this->board[i][j + 1] == color)
+	{
+		if (this->isPartOfSameColorChain(i, j + 1, color))
+		{
+			return true;
+		}
+	}
+
+	// If the given position is not surrounded by a chain of the given color, return false
+	return false;
 }
 
-int Board::getTopBoardBorderY() {
-	return this->topBoardBorderY;
+bool Board::isPartOfSameColorChain(int i, int j, int color)
+{
+	// Check if the position at the given coordinates is the given color
+	if (this->board[i][j] == color)
+	{
+		// Check if the position above the given position is the given color
+		if (i > 0 && this->board[i - 1][j] == color)
+		{
+			// Recursively call the isPartOfSameColorChain() function on the position above the given position
+			return this->isPartOfSameColorChain(i - 1, j, color);
+		}
+		// Check if the position below the given position is the given color
+		else if (i < this->size - 1 && this->board[i + 1][j] == color)
+		{
+			// Recursively call the isPartOfSameColorChain() function on the position below the given position
+			return this->isPartOfSameColorChain(i + 1, j, color);
+		}
+		// Check if the position to the left of the given position is the given color
+		else if (j > 0 && board[i][j - 1] == color)
+		{
+			// Recursively call the isPartOfSameColorChain() function on the position to the left of the given position
+			return this->isPartOfSameColorChain(i, j - 1, color);
+		}
+	}
 }
-
-void Board::setTopBoardBorderY(int y) {
-	this->topBoardBorderY = y;
-}
-
-int Board::getBottomBoardBorderY() {
-	return this->bottomBoardBorderY;
-}
-
-void Board::setBottomBoardBorderY(int y) {
-	this->bottomBoardBorderY = y;
-}
-
-int Board::getLeftBoardBorderX() {
-	return this->leftBoardBorderX;
-}
-
-void Board::setLeftBoardBorderX(int x) {
-	this->leftBoardBorderX = x;
-}
-
-int Board::getRightBoardBorderX() {
-	return this->rightBoardBorderX;
-}
-
-void Board::setRightBoardBorderX(int x) {
-	this->rightBoardBorderX = x;
-}
-
