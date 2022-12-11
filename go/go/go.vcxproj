@@ -128,10 +128,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="BoardFileService.cpp" />
     <ClCompile Include="BoardGetService.cpp" />
     <ClCompile Include="BoardSetService.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="Cursor.cpp" />
+    <ClCompile Include="Helper.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="conio2.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -145,6 +147,7 @@
     <ClInclude Include="conio2.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="Cursor.h" />
+    <ClInclude Include="Helper.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Point.h" />

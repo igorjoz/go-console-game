@@ -33,10 +33,10 @@ Board::Board(int size, bool isBoardSizeSelected, Player* blackPlayer, Player* wh
 }
 
 
-Board::Board(const Board& previousBoard) : // copy constructor
-	size(previousBoard.size),
-	blackPlayer(previousBoard.blackPlayer),
-	whitePlayer(previousBoard.whitePlayer) {
+Board::Board(const Board& prevBoard) : // copy constructor
+	size(prevBoard.size),
+	blackPlayer(prevBoard.blackPlayer),
+	whitePlayer(prevBoard.whitePlayer) {
 
 	this->isInGameEditorMode = false;
 	this->isBoardSizeSelected = false;
@@ -48,15 +48,15 @@ Board::Board(const Board& previousBoard) : // copy constructor
 	this->leftBoardBorderX = HORIZONTAL_BOARD_PADDING + 1;
 	
 	board = new short unsigned int* [this->size];
-	this->previousBoard = new short unsigned int* [this->size];
+	previousBoard = new short unsigned int* [this->size];
 
 	for (int i = 0; i < this->size; i++) {
 		board[i] = new short unsigned int[this->size];
-		this->previousBoard[i] = new short unsigned int[this->size];
+		previousBoard[i] = new short unsigned int[this->size];
 
 		for (int j = 0; j < this->size; j++) {
 			board[i][j] = 0;
-			this->previousBoard[i][j] = 0;
+			previousBoard[i][j] = 0;
 		}
 	}
 	
@@ -90,22 +90,31 @@ bool Board::insertStone() {
 
 	// if in game editor mode, black player can insert any number of stones before start of the game
 	if (this->isInGameEditorMode) {
+		this->previousBoard[rowIndex][columnIndex] = BLACK_PLAYER_ID;
 		this->board[rowIndex][columnIndex] = BLACK_PLAYER_ID;
 
 		return true;
 	}
 
-	if (this->isPositionOccupied(rowIndex, columnIndex) or this->isStoneSuicider(rowIndex, columnIndex)) {
+	if (this->isPositionOccupied(rowIndex, columnIndex)) {
 		return false;
 	}
 
+	this->previousBoard[rowIndex][columnIndex] = currentPlayerId;
 	this->board[rowIndex][columnIndex] = currentPlayerId;
+	this->removeNeighbouringStonesWithNoLiberties(rowIndex, columnIndex);
 
-	if (this->isKo()) {
+	/*bool isKo = this->isKo();
+
+	if (isKo) {
 		this->board[rowIndex][columnIndex] = EMPTY_POSITION_ID;
 		
 		return false;
-	}
+	}*/
+
+	/*if (this->isStoneSuicider(rowIndex, columnIndex, currentPlayerId)) {
+		return false;
+	}*/
 	
 	this->changePlayer();
 	this->removeStonesWithNoLiberties();
@@ -125,8 +134,8 @@ bool Board::isPositionOccupied(int rowIndex, int columnIndex) {
 }
 
 
-bool Board::isStoneSuicider(int rowIndex, int columnIndex) {
-	if (this->hasLiberty(rowIndex, columnIndex)) {
+bool Board::isStoneSuicider(int rowIndex, int columnIndex, short int currentPlayerId) {
+	if (this->hasLiberty(rowIndex, columnIndex, currentPlayerId)) {
 		return false;
 	}
 
@@ -159,9 +168,9 @@ bool Board::areBoardsEqual() {
 void Board::removeStonesWithNoLiberties() {
 	for (int rowIndex = 0; rowIndex < this->size; rowIndex++) {
 		for (int columnIndex = 0; columnIndex < this->size; columnIndex++) {
-			if (!this->hasLiberty(rowIndex, columnIndex)) {
-				short unsigned int boardValue = this->board[rowIndex][columnIndex];
-
+			short unsigned int boardValue = this->board[rowIndex][columnIndex];
+			
+			if (!this->hasLiberty(rowIndex, columnIndex, boardValue)) {
 				if (boardValue == BLACK_PLAYER_ID) {
 					this->incrementBlackPlayerScore();
 				}
@@ -170,20 +179,40 @@ void Board::removeStonesWithNoLiberties() {
 				}
 				
 				this->board[rowIndex][columnIndex] = EMPTY_POSITION_ID;
-				this->incrementCurrentPlayerScore();
 			}
 		}
 	}
 }
 
 
-bool Board::hasLiberty(int rowIndex, int columnIndex) {
+void Board::removeNeighbouringStonesWithNoLiberties(int rowIndex, int columnIndex) {
+	short int currentPlayerId = this->board[rowIndex][columnIndex];
+	short int opponentPlayerId = this->getOpponentPlayerId(currentPlayerId);
+	
+	for (int i = rowIndex - 1; i < rowIndex; i++) {
+		for (int j = columnIndex - 1; j < columnIndex; j++) {
+			if (i >= 0 and i < this->size and j >= 0 and j < this->size and !this->hasLiberty(i, j, opponentPlayerId)) {
+				short unsigned int boardValue = this->board[i][j];
+
+				if (boardValue == BLACK_PLAYER_ID) {
+					this->incrementBlackPlayerScore();
+				}
+				else if (boardValue == WHITE_PLAYER_ID) {
+					this->incrementWhitePlayerScore();
+				}
+
+				this->board[i][j] = EMPTY_POSITION_ID;
+			}
+		}
+	}
+}
+
+
+bool Board::hasLiberty(int rowIndex, int columnIndex, short unsigned int color) {
 	int leftPositionValue = -1;
 	int rightPositionValue = -1;
 	int topPositionValue = -1;
 	int bottomPositionValue = -1;
-
-	int currentPlayerId = this->getCurrentPlayerId();
 
 	int totalLiberties = 0;
 	bool hasLiberty = false;
@@ -191,7 +220,7 @@ bool Board::hasLiberty(int rowIndex, int columnIndex) {
 	if (rowIndex - 1 >= 0) {
 		leftPositionValue = this->getBoardValue(rowIndex - 1, columnIndex);
 
-		if (leftPositionValue == 0 or leftPositionValue == currentPlayerId) {
+		if (leftPositionValue == 0 or leftPositionValue == color) {
 			totalLiberties++;
 		}
 	}
@@ -199,7 +228,7 @@ bool Board::hasLiberty(int rowIndex, int columnIndex) {
 	if (rowIndex + 1 < this->size) {
 		rightPositionValue = this->getBoardValue(rowIndex + 1, columnIndex);
 
-		if (rightPositionValue == 0 or rightPositionValue == currentPlayerId) {
+		if (rightPositionValue == 0 or rightPositionValue == color) {
 			totalLiberties++;
 		}
 	}
@@ -207,7 +236,7 @@ bool Board::hasLiberty(int rowIndex, int columnIndex) {
 	if (columnIndex - 1 >= 0) {
 		topPositionValue = this->getBoardValue(rowIndex, columnIndex - 1);
 
-		if (topPositionValue == 0 or topPositionValue == currentPlayerId) {
+		if (topPositionValue == 0 or topPositionValue == color) {
 			totalLiberties++;
 		}
 	}
@@ -215,7 +244,7 @@ bool Board::hasLiberty(int rowIndex, int columnIndex) {
 	if (columnIndex + 1 < this->size) {
 		bottomPositionValue = this->getBoardValue(rowIndex, columnIndex + 1);
 
-		if (bottomPositionValue == 0 or bottomPositionValue == currentPlayerId) {
+		if (bottomPositionValue == 0 or bottomPositionValue == color) {
 			totalLiberties++;
 		}
 	}

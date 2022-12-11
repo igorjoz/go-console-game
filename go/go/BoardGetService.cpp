@@ -37,6 +37,16 @@ Player* Board::getWhitePlayer() {
 }
 
 
+short int Board::getOpponentPlayerId(short int currentPlayerId) {
+	if (currentPlayerId == BLACK_PLAYER_ID) {
+		return WHITE_PLAYER_ID;
+	}
+	else {
+		return BLACK_PLAYER_ID;
+	}
+}
+
+
 unsigned short int Board::getBoardValueByCursorPosition(int cursorX, int cursorY) {
 	return this->board[this->getRowIndex(cursorY)][this->getColumnIndex(cursorX)];
 }
@@ -108,10 +118,10 @@ char* Board::getPlayersScoreText() {
 	_itoa_s(blackPlayerScore, blackPlayerScoreText, 10);
 	_itoa_s(whitePlayerScore, whitePlayerScoreText, 10);
 
-	strcpy_s(playersScoreText, 32, ", black: ");
+	strcpy_s(playersScoreText, 32, "black: ");
 	strcat_s(playersScoreText, 32, blackPlayerScoreText);
 	
-	strcat_s(playersScoreText, 32, "white: ");
+	strcat_s(playersScoreText, 32, ", white: ");
 	strcat_s(playersScoreText, 32, whitePlayerScoreText);
 
 

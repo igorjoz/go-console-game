@@ -28,6 +28,7 @@ public:
 
 	bool insertStone();
 	void removeStonesWithNoLiberties();
+	void removeNeighbouringStonesWithNoLiberties(int rowIndex, int columnIndex);
 	void changePlayer();
 	void incrementCurrentPlayerScore();
 	void incrementBlackPlayerScore();
@@ -35,11 +36,11 @@ public:
 	void restartGame(Console console, Cursor cursor);
 	
 	bool isPositionOccupied(int rowIndex, int columnIndex);
-	bool isStoneSuicider(int rowIndex, int columnIndex);
+	bool isStoneSuicider(int rowIndex, int columnIndex, short int currentPlayerId);
 	bool isKo();
 	bool areBoardsEqual();
 	
-	bool hasLiberty(int rowIndex, int columnIndex);
+	bool hasLiberty(int rowIndex, int columnIndex, short unsigned int color);
 	
 	int interpretBoardSizeSelection(Cursor cursor);
 
@@ -66,6 +67,7 @@ public:
 	int getCurrentPlayerId();
 	Player* getBlackPlayer();
 	Player* getWhitePlayer();
+	short int getOpponentPlayerId(short int currentPlayerId);
 	
 	short unsigned int getBoardValueByCursorPosition(int cursorX, int cursorY);
 	short unsigned int getBoardValue(int rowIndex, int columnIndex);
@@ -96,6 +98,11 @@ public:
 	void setBoardValueByCursorPosition(int cursorX, int cursorY, short unsigned int value);
 	void setBoardValue(int rowIndex, int columnIndex, short unsigned int value);
 	void setPreviousBoardValue(int rowIndex, int columnIndex, short unsigned int value);
+
+	
+	// BoardFileService
+	void saveBoardToFile(char* fileName);
+	void loadBoardFromFile(char* fileName);
 	
 
 private:

@@ -8,6 +8,7 @@
 #include "Cursor.h"
 #include "Menu.h"
 #include "Player.h"
+#include "Helper.h"
 
 
 int main() {
@@ -61,28 +62,30 @@ int main() {
 		if (menu.getShouldDisplayCustomBoardSizeSelectionModal()) {
 			menu.showCustomBoardSizeSelectionModal(console, cursor);
 
-			//console.setKeyCode(getch());
-			//console.setKeyCode();
-
-			char* digits[100];
+			console.setKeyCode(NEW_GAME_KEY_CHARACTER);
+			
+			char digits[100];
 			int digitIndex = 0;
 
-			/*while (true) {
-				console.setKeyCode(getch());
-				digits[digitIndex++] = (((char)console.getKeyCode()))[0];
+			do {
+				console.setKeyCode(getche());
+				
+				digits[digitIndex] = (char)(console.getKeyCode());
+				digitIndex++;
+				
+			} while (console.getKeyCode() != ENTER_KEY_CODE);
 
-				if (console.getKeyCode() == ENTER_KEY_CODE or console.getKeyCode() == '\r') {
-					menu.setShouldDisplayCustomBoardSizeSelectionModal(false);
-					break;
-				}
-			}*/
+			digitIndex--;
+
+			for (int i = 0; i < digitIndex; i++) {
+				putch(digits[i]);
+			}
+
+			int newSize = Helper::convertDigitsArrayIntoNumber(digits, digitIndex);
+			board = Board(newSize, true, board.getBlackPlayer(), board.getWhitePlayer());
 			
-			char digit = getche();
-			putch(digit);
-			getche();
-			putch(digit);
-			getche();
-			
+			menu.setShouldDisplayCustomBoardSizeSelectionModal(false);
+
 			continue;
 		}
 
@@ -108,6 +111,15 @@ int main() {
 		else if (console.getKeyCode() == ENTER_EXIT_GAME_EDITOR_KEY_CHARACTER) {
 			bool newState = !board.getIsInGameEditorMode();
 			board.setIsInGameEditorMode(newState);
+		}
+		else if (console.getKeyCode() == SAVE_GAME_KEY_CHARACTER) {
+			char fileName[100] = "test.txt";
+			board.saveBoardToFile(fileName);
+			
+		}
+		else if (console.getKeyCode() == LOAD_GAME_KEY_CHARACTER) {
+			char fileName[100] = "test.txt";
+			board.loadBoardFromFile(fileName);
 		}
 		else if (console.getKeyCode() == ' ') {
 			console.setNextTextColor();
