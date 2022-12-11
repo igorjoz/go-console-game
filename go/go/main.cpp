@@ -113,9 +113,6 @@ int main() {
 			board.setIsInGameEditorMode(newState);
 		}
 		else if (console.getKeyCode() == SAVE_GAME_KEY_CHARACTER) {
-			//char fileName[100] = "test.txt";
-			//board.saveBoardToFile(fileName);
-
 			if (menu.getShouldDisplayFileNameInput()) {
 				menu.showFileNameInputModal(console, cursor);
 
@@ -135,14 +132,31 @@ int main() {
 				
 				board.saveBoardToFile(characters);
 
-				//menu.setShouldDisplayFileNameInput(false);
-
 				continue;
 			}
 		}
 		else if (console.getKeyCode() == LOAD_GAME_KEY_CHARACTER) {
-			char fileName[100] = "test.txt";
-			board.loadBoardFromFile(fileName);
+			if (menu.getShouldDisplayFileNameInput()) {
+				menu.showFileNameInputModal(console, cursor);
+
+				char characters[100] = {};
+				int characterIndex = 0;
+
+				do {
+					console.setKeyCode(getche());
+
+					characters[characterIndex] = (char)(console.getKeyCode());
+					characterIndex++;
+				} while (console.getKeyCode() != ENTER_KEY_CODE);
+
+				characterIndex--;
+
+				characters[characterIndex] = '\0';
+
+				board.loadBoardFromFile(characters);
+
+				continue;
+			}
 		}
 		else if (console.getKeyCode() == ' ') {
 			console.setNextTextColor();
