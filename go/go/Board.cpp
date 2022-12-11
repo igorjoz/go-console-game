@@ -94,7 +94,13 @@ bool Board::insertStone() {
 	int rowIndex = this->getRowIndex(cursorY);
 	int columnIndex = this->getColumnIndex(cursorX);
 
-	this->copyBoardIntoPreviousBoard();
+	int** temporaryBoard = new int* [this->size];
+	for (int i = 0; i < this->size; i++) {
+		temporaryBoard[i] = new int[this->size];
+		for (int j = 0; j < this->size; j++) {
+			temporaryBoard[i][j] = this->board[i][j];
+		}
+	}
 
 	// if in game editor mode, black player can insert any number of stones before start of the game
 	if (this->isInGameEditorMode) {
@@ -114,10 +120,14 @@ bool Board::insertStone() {
 	
 	this->removeNeighbouringStonesWithNoLiberties(rowIndex, columnIndex);
 
-	bool isKo = this->isKo();
-
-	if (isKo) {
+	if (this->isKo()) {
 		this->board[rowIndex][columnIndex] = EMPTY_POSITION_ID;
+
+		for (int i = 0; i < this->size; i++) {
+			for (int j = 0; j < this->size; j++) {
+				this->board[i][j] = temporaryBoard[i][j];
+			}
+		}
 		
 		return false;
 	}
@@ -125,6 +135,12 @@ bool Board::insertStone() {
 	/*if (this->isStoneSuicider(rowIndex, columnIndex, currentPlayerId)) {
 		return false;
 	}*/
+
+	for (int i = 0; i < this->size; i++) {
+		for (int j = 0; j < this->size; j++) {
+			this->previousBoard[i][j] = temporaryBoard[i][j];
+		}
+	}
 
 	this->changePlayer();
 	//this->removeStonesWithNoLiberties();
